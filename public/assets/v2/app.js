@@ -171,7 +171,7 @@ function calcularPromedios(data) {
 
 async function fetchDatosEstadistica(f) {
   return await $.ajax({
-    url: "./CargarHurgencias.php",
+    url: "./estadisticas",
     dataType: "json",
     method: "POST",
     data: {

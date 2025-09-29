@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Http\Controllers;
+
+use App\Services\InfoLoaderService;
+use Laminas\Diactoros\Response\JsonResponse;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+
+class EstadisticasController
+{
+	public function data(
+		Request $request,
+		InfoLoaderService $loaderService
+	): Response {
+		$fechaGet  = @$request->getQueryParams()['fe'];
+		$fechaPost = @$request->getParsedBody()['fe'];
+
+		$fecha = $fechaPost ?: $fechaGet ?: date('Y-m-d');
+		$fechaForGema = date('m.d.y', strtotime($fecha));
+
+		$loaderService->loadWithTriage($fechaForGema);
+		$loaderService->loadWithoutTriage($fechaForGema);
+
+		return new JsonResponse($loaderService->getData());
+	}	
+}
