@@ -75,6 +75,7 @@ function calcularAtencionesPorMedico(data) {
  * @param {Object} contadores Objeto con el conteo de los diferentes items
  */
 function setContadores(contadores) {
+  $("#nt0").text(contadores.triage[0]);
   $("#nt1").text(contadores.triage[1]);
   $("#nt2").text(contadores.triage[2]);
   $("#nt3").text(contadores.triage[3]);

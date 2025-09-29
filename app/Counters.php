@@ -13,6 +13,7 @@ class Counters
     private int $sinHurge = 0;
     private int $sinAdmision = 0;
     private array $triage = [
+        0 => 0,
         1 => 0,
         2 => 0,
         3 => 0,

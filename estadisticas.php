@@ -33,7 +33,7 @@
   <!-- jQuery -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script> -->
   <!-- <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script> -->
   <!-- Estadisticas -->
   <script src="./assets/estadisticas.js"></script>
@@ -137,6 +137,7 @@
       <div>
         <span class="fw-bold small">Conteo Triage</span>
         <div class="d-flex flex-column rounded border overflow-hidden small">
+          <span class="bg-white border-bottom d-block small px-3 py-1">Sin Triage: <b id="nt0" class="d-inline-block ms-2"></b></span>
           <span class="bg-white border-bottom d-block small px-3 py-1">Triage 1: <b id="nt1" class="d-inline-block ms-2"></b></span>
           <span class="bg-white border-bottom d-block small px-3 py-1">Triage 2: <b id="nt2" class="d-inline-block ms-2"></b></span>
           <span class="bg-white border-bottom d-block small px-3 py-1">Triage 3: <b id="nt3" class="d-inline-block ms-2"></b></span>
