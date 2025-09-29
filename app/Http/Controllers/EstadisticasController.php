@@ -15,6 +15,11 @@ class EstadisticasController
 		Request $request,
 		InfoLoaderService $loaderService
 	): Response {
+		/* Solamente porque estamos en entorno de desarrollo */
+		if (true) return new JsonResponse(json_decode(file_get_contents(
+			PROJECT_BASE_PATH . '/mock-data.json'
+		), true));
+
 		$fechaGet  = @$request->getQueryParams()['fe'];
 		$fechaPost = @$request->getParsedBody()['fe'];
 

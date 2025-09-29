@@ -11,7 +11,7 @@
     crossorigin="anonymous"
   >
   <link rel="stylesheet" href="assets/estadisticas.css" />
-  <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.6/css/line.css">
+  <!-- <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.6/css/line.css"> -->
   <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
   <link
@@ -54,16 +54,6 @@
     </div>
   </div>
   <div class="main-container pt-4">
-    <div class="d-flex gap-3 pb-2 overflow-x-auto">
-      <button class="btn-warning custom-button" data-toggle="tooltip" data-placement="left" title="Numero de advertencias" disabled><img src="Image/advertencia.png"><span id="adv" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="custom-button" data-toggle="tooltip" data-placement="left" title="Cantidad de Hombres" style="background-color: #BBB8FF;" disabled><img src="Image/hombre.png"><span id="chombre" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="custom-button" data-toggle="tooltip" data-placement="left" title="Cantidad de Mujeres" style="background-color: #FFA4A4;" disabled><img src="Image/mujer.png"><span id="cmujer" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="custom-button" data-toggle="tooltip" data-placement="left" title="Total Admisiones" style="background-color: #FFF890;" disabled><img src="Image/admision.png"><span id="tadm" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="btn-primary custom-button" data-toggle="tooltip" data-placement="left" title="Sin Admision" style="background-color: #A9F9EB;" disabled><img src="Image/sinadm.png"><span id="stria" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="btn-primary custom-button" data-toggle="tooltip" data-placement="left" title="Sin H. Urgencias" style="background-color: #8BFFB5;" disabled><img src="Image/paciente.png"><span id="shur" style="color: #362F35;" class="mx-md-1"></span></button>
-      <button class="custom-button btn-outline-dark" data-toggle="tooltip" data-placement="left" title="Turnos Pendientes" disabled><img src="Image/turnos.png"><span id="digi" style="color: #362F35;" class="mx-md-1"></span></button>
-    </div>
-
     <?php if((int) $user->medicoId === 0): ?>
       <div>
         <span class="fw-bold small">Atenciones x Medico</span>
@@ -74,27 +64,8 @@
       </div>
     <?php endif ?>
 
-
-    <div class="bg-body-tertiary rounded-top border small d-flex" style="
-      padding-bottom: 1rem;
-      margin-bottom: -0.8rem;
-    ">
-      <div class="flex flex-column align-items-center">
-        <span class="small">Triage</span>
-        <div class="radio-group-3">
-          <?php foreach(['Sin Traige','1','2','3','4','5'] as $i => $triage): ?>
-            <div class="radio-item-3 text-nowrap">
-              <input type="radio" id="filtro-triage-<?= $i ?>" name="filtro-triage" value="<?= $i ?>">
-              <label for="filtro-triage-<?= $i ?>"><?= $triage ?></label>
-            </div>
-          <?php endforeach ?>
-          <div class="radio-item-3">
-            <input type="radio" id="filtro-triage-all" name="filtro-triage" value="" checked>
-            <label for="filtro-triage-all">Todo</label>
-          </div>
-        </div>
-      </div>
-    </div>
+    <?= $this->fetch('./partials/contadores.php') ?>
+    <?= $this->fetch('./partials/filtro-triage.php') ?>
 
     <div class="d-flex mb-4 position-relative">
       <!-- Grilla -->
