@@ -8,6 +8,7 @@ $(async function () {
   myDate.attr("max", today);
 
   TABLA = listar([]);
+  setUpTriageFilter(TABLA);
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
     showInfoModal(data); // estadisticas.js
@@ -253,7 +254,7 @@ function listar(data) {
       },
       {
         data: "steps.triage.formatedDiff",
-        className: "small position-absolute crono-class border-0 shadow-none",
+        className: "small position-absolute crono-class border-0 shadow-none w-0 p-0 text-nowrap",
         orderable: false,
       },
       {
@@ -272,7 +273,7 @@ function listar(data) {
       },
       {
         data: "steps.admision.formatedDiff",
-        className: "small position-absolute crono-class border-0 shadow-none",
+        className: "small position-absolute crono-class w-0 p-0 border-0 shadow-none",
         orderable: false,
       },
       {
@@ -291,7 +292,7 @@ function listar(data) {
       },
       {
         data: "steps.hurge.formatedDiff",
-        className: "small position-absolute crono-class border-0 shadow-none",
+        className: "small position-absolute crono-class w-0 p-0 border-0 shadow-none",
         orderable: false,
       },
       {
@@ -326,7 +327,7 @@ function listar(data) {
       },
       {
         data: "steps.egresoHurge.formatedDiff",
-        className: "small position-absolute crono-class border-0 shadow-none",
+        className: "small position-absolute crono-class w-0 p-0 border-0 shadow-none",
         orderable: false,
       },
       {

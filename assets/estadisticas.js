@@ -254,3 +254,23 @@ function hideInfoModal() {
   $('#modal-info-urgencias').hide();
   $('body').removeClass('overflow-y-hidden');
 }
+
+
+/** Establece los eventos y la función de filtrado para los diferentes triages. */ 
+function setUpTriageFilter(table) {
+  // Listener para radios y filtrado por triage
+  document.querySelectorAll('input[type="radio"][name="filtro-triage"]').forEach(el => {
+    el.addEventListener('change', () => TABLA.draw());
+  })
+
+  // Filtro para triage
+  table.search.fixed('range', function (searchStr, data, index) {
+    const query = document.querySelector('input[name="filtro-triage"]:checked')?.value;
+    const parsedQuery = parseInt(query);
+
+    if (isNaN(parsedQuery)) return true;
+    const triage = data.clase_triage;
+
+    return parsedQuery === triage;
+  });
+}

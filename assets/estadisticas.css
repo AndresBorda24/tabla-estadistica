@@ -3,11 +3,17 @@
   min-width: 200px;
 }
 
+.w-0 {
+  width: 0;
+}
+
 .crono-class {
   transform: translateX(-48%);
   top: 35px;
   font-size: 10px;
   color: #aeaeae;
+  margin-left: -18px;
+  text-wrap: nowrap;
 }
 
 .flex { display: flex; }
@@ -224,4 +230,52 @@ table.dataTable tbody tr td {
     scrollbar-color: var(--sb-thumb-color)
                      var(--sb-track-color);
   }
+}
+
+
+.radio-group-3 {
+  display: flex;
+  background: #f8f9fa;
+  padding: 0 0.5rem;
+  position: relative;
+}
+
+.radio-item-3 {
+  flex: 1;
+  position: relative;
+}
+
+.radio-item-3 input[type="radio"] {
+  display: none;
+}
+
+.radio-item-3 label {
+  display: block;
+  padding: 0.2rem .5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.3s ease, background 0.3s ease;
+  position: relative;
+  z-index: 2;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.radio-item-3 input[type="radio"]:checked + label {
+  color: #ffffff;
+  background: #1f7cd5;
+}
+
+/* Ajuste css para datatables 2.3.4 */
+.dt-paging nav {
+  display: flex;
+  justify-content: end;
+}
+.dt-buttons, .dt-search {
+  display: inline-block;
+} 
+.dt-search {
+  float: right;
+  margin-right: 1rem;
 }

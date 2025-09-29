@@ -20,7 +20,7 @@
   <link rel="stylesheet" href="assets/estadisticas.css" />
   <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.6/css/line.css">
   <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
-  <link rel="stylesheet" href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+  <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
   <link
     rel="stylesheet"
     type="text/css"
@@ -28,7 +28,7 @@
   >
   <link
     rel="stylesheet"
-    href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css"
+    href="https://cdn.datatables.net/buttons/3.2.5/css/buttons.dataTables.min.css"
   >
   <!-- jQuery -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
@@ -81,7 +81,29 @@
       </div>
     <?php endif ?>
 
-    <div class="d-flex mb-4">
+
+    <div class="bg-body-tertiary rounded-top border small d-flex" style="
+      padding-bottom: 1rem;
+      margin-bottom: -0.8rem;
+    ">
+      <div class="flex flex-column align-items-center">
+        <span class="small">Triage</span>
+        <div class="radio-group-3">
+          <?php foreach(['Sin Traige','1','2','3','4','5'] as $i => $triage): ?>
+            <div class="radio-item-3 text-nowrap">
+              <input type="radio" id="filtro-triage-<?= $i ?>" name="filtro-triage" value="<?= $i ?>">
+              <label for="filtro-triage-<?= $i ?>"><?= $triage ?></label>
+            </div>
+          <?php endforeach ?>
+          <div class="radio-item-3">
+            <input type="radio" id="filtro-triage-all" name="filtro-triage" value="" checked>
+            <label for="filtro-triage-all">Todo</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex mb-4 position-relative">
       <!-- Grilla -->
       <div class="rounded border py-3 px-0 flex-grow-1 w-100 bg-body-tertiary">
         <div class="text-center" id="cargaInfo">
@@ -191,11 +213,12 @@
     </div>
   </div>
 
-  <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+  <!-- <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
+  <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.7.0/js/buttons.html5.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.7.0/js/buttons.print.min.js"></script>
-  <script src="//cdn.datatables.net/buttons/1.7.0/js/buttons.colVis.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.print.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/3.2.5/js/buttons.colVis.min.js"></script>
 </body>
 </html>
