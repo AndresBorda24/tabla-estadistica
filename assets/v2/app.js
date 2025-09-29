@@ -193,7 +193,7 @@ function listar(data) {
     dom: "Bfrtip",
     buttons: ["excel"],
     data: data,
-    order: [[0, "desc"]],
+    order: [[0, "asc"]],
     columns: [
       {
         data: "alerta",
