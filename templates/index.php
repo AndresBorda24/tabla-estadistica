@@ -54,18 +54,14 @@
     </div>
   </div>
   <div class="main-container pt-4">
-    <?php if((int) $user->medicoId === 0): ?>
-      <div>
-        <span class="fw-bold small">Atenciones x Medico</span>
-        <div
-          id="contenido"
-          class="d-flex overflow-x-auto gap-3 mb-4 pb-2"
-        ></div>
-      </div>
-    <?php endif ?>
-
-    <?= $this->fetch('./partials/contadores.php') ?>
-    <?= $this->fetch('./partials/filtro-triage.php') ?>
+    <div class="bg-body-tertiary rounded-top border small d-flex" style="
+      padding-bottom: 1rem;
+      padding-top: 6px;
+      margin-bottom: -0.8rem;
+    ">
+      <?= $this->fetch('./partials/filtro-triage.php') ?>
+      <?= $this->fetch('./partials/filtro-tipos.php') ?>
+    </div>
 
     <div class="d-flex mb-4 position-relative">
       <!-- Grilla -->
@@ -96,6 +92,16 @@
         </table>
       </div>
     </div>
+
+    <?php if((int) $user->medicoId === 0): ?>
+      <div>
+        <span class="fw-bold small">Atenciones x Medico</span>
+        <div
+          id="contenido"
+          class="d-flex overflow-x-auto gap-3 mb-4 pb-2"
+        ></div>
+      </div>
+    <?php endif ?>
 
     <div class="d-flex flex-column flex-lg-row gap-4">
       <div>

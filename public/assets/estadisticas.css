@@ -287,81 +287,57 @@ table.dataTable tbody tr td {
 }
 
 /* Versión compacta con icono al lado del número */
-.indicator-card-side {
-    min-width: 100px;
-    max-width: 110px;
-    border-radius: 6px;
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    transition: transform 0.2s, box-shadow 0.2s;
-    cursor: default;
-    border: none;
-    text-decoration: none;
-    color: inherit;
-    height: 50px;
+.filtro-type-card-side {
+  min-width: 90px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  border-radius: 3px;
+  text-decoration: none;
+  color: #362F35;
 }
 
-.indicator-label-side {
-    font-size: 10px;
-    font-weight: 500;
-    text-align: center;
-    color: #362F35;
-    line-height: 1.2;
-    width: 100%;
+.filtro-type-label-side {
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
 }
 
-.indicator-content-side {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    width: 100%;
+.filtro-type-content-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
 }
 
-.indicator-icon-side {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-    line-height: 0;
+.filtro-type-icon-side {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  line-height: 0;
 }
 
-.indicator-value-side {
-    font-size: 16px;
-    font-weight: bold;
-    color: #362F35;
-    line-height: 1;
+.filtro-type-value-side {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
 }
 
-/* Colores específicos para cada indicador */
-.indicator-warning {
-  background-color: #ffc107;
+.filtro-type-card-side:hover {
+  background-color: #eeeeee;
 }
 
-.indicator-men {
-  background-color: #BBB8FF;
+input[type="checkbox"][name="filtro-type"]:checked + label{
+  color: #ffffff;
+  background-color: #1f7cd5;
 }
-
-.indicator-women {
-  background-color: #FFA4A4;
-}
-
-.indicator-admissions {
-  background-color: #FFF890;
-}
-
-.indicator-no-admission {
-  background-color: #A9F9EB;
-}
-
-.indicator-no-emergency {
-  background-color: #8BFFB5;
-}
-
-.indicator-pending {
+.filtro-type-pending {
   background-color: #f8f9fa;
   border: 1px solid #dee2e6;
 }

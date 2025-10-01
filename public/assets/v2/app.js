@@ -9,6 +9,7 @@ $(async function () {
 
   TABLA = listar([]);
   setUpTriageFilter(TABLA);
+  setUpTypeFilter(TABLA);
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
     showInfoModal(data); // estadisticas.js
@@ -82,12 +83,12 @@ function setContadores(contadores) {
   $("#nt4").text(contadores.triage[4]);
   $("#nt5").text(contadores.triage[5]);
 
-  $("#shur").html(contadores.sinHurge);
-  $("#stria").html(contadores.sinAdmision);
-  $("#tadm").html(contadores.general);
-  $("#adv").html(contadores.alertas);
-  $("#chombre").html(contadores.hombres);
-  $("#cmujer").html(contadores.mujeres);
+  $("#contador-no-emergency").html(contadores.sinHurge);
+  $("#contador-no-admission").html(contadores.sinAdmision);
+  $("#contador-admission").html(contadores.general);
+  $("#contador-warning").html(contadores.alertas);
+  $("#contador-man").html(contadores.hombres);
+  $("#contador-woman").html(contadores.mujeres);
 }
 
 /**
