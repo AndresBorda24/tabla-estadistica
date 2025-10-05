@@ -1,0 +1,344 @@
+.name-width {
+  width: 200px;
+  min-width: 200px;
+}
+
+.w-0 {
+  width: 0;
+}
+
+.crono-class {
+  transform: translateX(-48%);
+  top: 35px;
+  font-size: 10px;
+  color: #aeaeae;
+  margin-left: -18px;
+  text-wrap: nowrap;
+}
+
+.flex { display: flex; }
+table.dataTable tbody tr {
+  position: relative;
+}
+
+table.dataTable tbody tr td {
+  vertical-align: top !important;
+}
+
+#gridEst thead tr th {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+/* TimeLine */
+.timeline {
+  position: absolute;
+  --bg-green: #4fd363;
+}
+.warning.timeline {
+  --bg-green: #d42b2b;
+}
+.timeline.marker {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  left: 0;
+  right: 0;
+  top: 11px;
+  margin: auto;
+  z-index: 1;
+}
+
+.timeline.marker.marker-on {
+  background-color: var(--bg-green);
+}
+.timeline.marker.marker-on.current {
+  width: 10px;
+  height: 10px;
+  top: 10px;
+  background-color: #dcffe1;
+  border: 2px solid var(--bg-green);
+  transition: transform 150ms ease-out;
+}
+.timeline.marker.marker-on.current.hover:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.timeline.prev,
+.timeline.next {
+  width: 50%;
+  height: 0px;
+  overflow: hidden;
+  border-top: 2px solid darkgray;
+  top: 13px;
+  opacity: 25%;
+}
+
+.timeline.next {
+  right: 0;
+}
+
+.timeline.prev {
+  left: 0;
+}
+
+.timeline.prev.has-prev,
+.timeline.next.has-next {
+  border-color: var(--bg-green);
+}
+.timeline.next.has-next.half {
+  border: 0px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--bg-green) 0%, darkgray 50%)
+}
+/* Fin del TimeLine */
+#h52 {
+  text-align: center;
+  background-color: #53A7E8;
+  height: 20px;
+  width: 100%;
+  border-radius: 5px;
+}
+
+.tabledoc-wrapper {
+  width: 100%;
+  height: 100%;
+  /* Altura de ejemplo */
+  overflow: auto;
+}
+
+.table-wrapper table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-wrapper table thead {
+  position: -webkit-sticky;
+  /* Safari... */
+  position: sticky;
+  top: 0;
+  left: 0;
+}
+
+.table-wrapper table thead th,
+.table-wrapper table tbody td {
+  /* border: 1px solid #000; */
+  background-color: #FFF;
+}
+
+.custom-button {
+  width: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 10px; */
+  padding: .5rem 1rem;
+  font-size: 14px;
+  /* Color de fondo del botón */
+  color: #fff;
+  /* Color del texto */
+  border: none;
+  /* Elimina el borde predeterminado del botón */
+  cursor: pointer;
+  /* Cambia el cursor al pasar por encima */
+  border-radius: 5px;
+  box-shadow: 2px 2px 5px rgb(121 121 121 / 24%);
+}
+
+.main-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* @media (max-width: 768px) {
+  .custom-button {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+} */
+
+/* Estilo para pantallas medianas (tablet) */
+/* @media (min-width: 768px) and (max-width: 1024px) {
+  .custom-button {
+    font-size: 16px;
+    padding: 10px 20px;
+  }
+} */
+
+/* Estilo para pantallas grandes (escritorio) */
+@media (min-width: 1025px) {
+}
+
+.gateway-background {
+  z-index: -1;
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100dvh;
+  width: 100%;
+  background-color: white;
+  background: linear-gradient(to right, #f0f0f0 1px, transparent 1px),
+    linear-gradient(to bottom, #f0f0f0 1px, transparent 1px);
+  background-size: 6rem 4rem;
+}
+
+/* Ajuste de estilos a unos elementos de la grilla */
+.dt-buttons,
+.dataTables_info {
+  padding-left: .75rem;
+}
+.dataTables_filter {
+  padding-right: .75rem;
+}
+
+.no-before::before {
+  content: unset !important;
+}
+
+
+/* ScrollBars */
+.scrollbars {
+  --sb-track-color: transparent;
+  --sb-thumb-color: transparent;
+  --sb-size: 7px;
+}
+.scrollbars:hover {
+  --sb-track-color: #f3f3f3;
+  --sb-thumb-color: #e2e2e2;
+}
+
+.scrollbars::-webkit-scrollbar {
+  width: var(--sb-size);
+  height: var(--sb-size);
+}
+
+.scrollbars::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 3px;
+}
+
+.scrollbars::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 3px;
+
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .scrollbars {
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
+}
+
+
+.radio-group-3 {
+  display: flex;
+  background: #f8f9fa;
+  padding: 0 0.5rem;
+  position: relative;
+}
+
+.radio-item-3 {
+  flex: 1;
+  position: relative;
+}
+
+.radio-item-3 input[type="radio"] {
+  display: none;
+}
+
+.radio-item-3 label {
+  display: block;
+  padding: 0.2rem .5rem;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: color 0.3s ease, background 0.3s ease;
+  position: relative;
+  z-index: 2;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.radio-item-3 input[type="radio"]:checked + label {
+  color: #ffffff;
+  background: #1f7cd5;
+}
+
+/* Ajuste css para datatables 2.3.4 */
+.dt-paging nav {
+  display: flex;
+  justify-content: end;
+}
+.dt-buttons, .dt-search {
+  display: inline-block;
+} 
+.dt-search {
+  float: right;
+  margin-right: 1rem;
+}
+
+/* Estilos para indicadores / contadores */
+.indicators-container {
+    padding-bottom: 1rem;
+    overflow-x: auto;
+}
+
+/* Versión compacta con icono al lado del número */
+.filtro-type-card-side {
+  min-width: 90px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  border-radius: 3px;
+  text-decoration: none;
+  color: #362F35;
+}
+
+.filtro-type-label-side {
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.filtro-type-content-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.filtro-type-icon-side {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.filtro-type-value-side {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.filtro-type-card-side:hover {
+  background-color: #eeeeee;
+}
+
+input[type="checkbox"][name="filtro-type"]:checked + label{
+  color: #ffffff;
+  background-color: #1f7cd5;
+}
+.filtro-type-pending {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+

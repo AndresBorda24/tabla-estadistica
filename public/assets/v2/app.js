@@ -34,6 +34,11 @@ function cagarDatos({ data, contadores }) {
   TABLA.clear();
   TABLA.rows.add(data);
   TABLA.draw();
+  
+  // Notificamos que la información ha sido cargada y compartimos esa info.
+  document.dispatchEvent(
+    new CustomEvent('table-data-refresh', { detail: data })
+  );
 }
 
 /** Se encarga de pone los valores de "Atenciones x Medico" */

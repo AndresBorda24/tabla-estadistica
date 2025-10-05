@@ -10,9 +10,6 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   >
-  <link rel="stylesheet" href="assets/estadisticas.css" />
-  <!-- <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.6/css/line.css"> -->
-  <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
   <link
     rel="stylesheet"
@@ -24,12 +21,18 @@
     href="https://cdn.datatables.net/buttons/3.2.5/css/buttons.dataTables.min.css"
   >
   <!-- jQuery -->
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <!-- Estadisticas -->
   <script src="./assets/estadisticas.js"></script>
   <script src="./assets/v2/app.js" defer></script>
-  <title>Estadisticas</title>
+
+  <?php if(! $isDevelopment): echo $vite->tags() ?>
+  <?php else: ?>
+    <script type="module" src="http://localhost:5173/@vite/client"></script>
+    <script type="module" src="http://localhost:5173/src/main.js"></script> 
+  <?php endif ?>
+
+  <title>Estadísticas</title>
 </head>
 <body>
   <div class="gateway-background"></div>
