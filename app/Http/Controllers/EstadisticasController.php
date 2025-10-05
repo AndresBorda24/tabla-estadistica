@@ -15,11 +15,6 @@ class EstadisticasController
 		Request $request,
 		InfoLoaderService $loaderService
 	): Response {
-		/* Solamente porque estamos en entorno de desarrollo */
-		if (true) return new JsonResponse(json_decode(file_get_contents(
-			PROJECT_BASE_PATH . '/mock-data.json'
-		), true));
-
 		$fechaGet  = @$request->getQueryParams()['fe'];
 		$fechaPost = @$request->getParsedBody()['fe'];
 
@@ -30,5 +25,16 @@ class EstadisticasController
 		$loaderService->loadWithoutTriage($fechaForGema);
 
 		return new JsonResponse($loaderService->getData());
+	}	
+
+	/**
+	 * Este método solamente debe ser utilizado en entornos de desarrollo.
+	 * Está pensado para un cargue de información fija para evitar consultas y 
+	 * agilizar el desarrollo.
+	 */ 
+	public function devData(): Response {
+		return new JsonResponse(json_decode(file_get_contents(
+			PROJECT_BASE_PATH . '/mock-data.json'
+		), true));
 	}	
 }
