@@ -186,7 +186,7 @@ function listar(data) {
 
   return $("#gridEst").DataTable({
     language: {
-      url: "//cdn.datatables.net/plug-ins/2.2.2/i18n/es-MX.json",
+      url: "es-MX.json",
     },
     scrollY: "50vh",
     scrollX: true,

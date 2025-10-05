@@ -26,8 +26,6 @@
   <!-- jQuery -->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script> -->
-  <!-- <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script> -->
   <!-- Estadisticas -->
   <script src="./assets/estadisticas.js"></script>
   <script src="./assets/v2/app.js" defer></script>
@@ -184,7 +182,6 @@
     </div>
   </div>
 
-  <!-- <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
   <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
