@@ -26,7 +26,7 @@
   <script src="./assets/estadisticas.js"></script>
   <script src="./assets/v2/app.js" defer></script>
 
-  <?php if(! $isDevelopment): echo $vite->tags() ?>
+  <?php if(App\Config::isProduction()): echo $vite->tags() ?>
   <?php else: ?>
     <script type="module" src="http://localhost:5173/@vite/client"></script>
     <script type="module" src="http://localhost:5173/src/main.js"></script> 

@@ -7,20 +7,16 @@ namespace App\Http\Controllers;
 use App\UserSession;
 use HighLiuk\Vite\Manifest;
 use HighLiuk\Vite\Vite;
-use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class ViewController
 {
-	public function __construct(
-		public readonly PhpRenderer $views,
-		ContainerInterface $container
-	) {
+	public function __construct( public readonly PhpRenderer $views) 
+	{
 		$vite = new Vite(
 			new Manifest(PROJECT_BASE_PATH.'/public/src/', '/src/')
 		);
-		$this->views->addAttribute('isDevelopment', $container->get('env') !== 'prod');
 		$this->views->addAttribute('vite', $vite);
 	}
 
