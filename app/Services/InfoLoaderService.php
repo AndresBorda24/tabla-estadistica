@@ -103,8 +103,8 @@ class InfoLoaderService
         $infoTriage->setNextDate($admision->strTime);
 
         // Información de la hoja de Urgencias
-        $informacionHurgencias = ($docn) ?
-            $this->datosHurge->getAll((string) $docn, $paciente->documento)
+        $informacionHurgencias = ($docn)
+            ? $this->datosHurge->getAll((string) $docn, $paciente->documento)
             : [];
 
         // Información del médico

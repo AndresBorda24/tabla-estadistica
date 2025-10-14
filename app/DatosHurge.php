@@ -16,7 +16,8 @@ final class DatosHurge
             'imagenes'  => $this->getImagenes($docn, $cc),
             'lab'       => $this->getExamenes($docn),
             'intercon'  => $this->getSolinter($docn),
-            'evolucion' => $this->getEvoluciones($docn)
+            'evolucion' => $this->getEvoluciones($docn),
+            'tratamiento' => $this->getTratamiento($docn)
         ];
 
         return $data;
@@ -153,6 +154,18 @@ final class DatosHurge
 
 
         return $returnData;
+    }
+
+    public function getTratamiento(string $docn): ?string
+    {
+        $x = $this->fox->query(
+            "SELECT tratami
+            FROM GEMA_MEDICOS\DATOS\RE_HURGE
+            WHERE docn = $docn"
+        );
+
+        $data = $x->fetchColumn();
+        return $data ?: null;
     }
 
     private function getLatest(array $input): array
