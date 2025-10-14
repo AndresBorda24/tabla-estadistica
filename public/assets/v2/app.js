@@ -9,6 +9,9 @@ $(async function () {
 
   TABLA = listar([]);
   setUpTriageFilter(TABLA);
+  setUpTypeFilter(TABLA);
+  // Los eventos para el filtrado por medico se establecen más adelante ...
+
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
     showInfoModal(data); // estadisticas.js
@@ -24,8 +27,7 @@ $(async function () {
 function cagarDatos({ data, contadores }) {
   // Medicos
   calcularAtencionesPorMedico(data);
-  // Promedios de atención
-  calcularPromedios(data);
+  setUpDoctorFilter(TABLA);
   // Conteo de los triage
   setContadores(contadores);
 
@@ -33,11 +35,17 @@ function cagarDatos({ data, contadores }) {
   TABLA.clear();
   TABLA.rows.add(data);
   TABLA.draw();
+  
+  // Notificamos que la información ha sido cargada y compartimos esa info.
+  document.dispatchEvent(
+    new CustomEvent('table-data-refresh', { detail: data })
+  );
 }
 
 /** Se encarga de pone los valores de "Atenciones x Medico" */
 function calcularAtencionesPorMedico(data) {
   const arrayMedicos = {};
+  const arrayMedicosSorted = {};
 
   data.forEach(({ medico }) => {
     if (!medico) return;
@@ -53,18 +61,27 @@ function calcularAtencionesPorMedico(data) {
     arrayMedicos[cod].total++;
   });
 
+  // Ordenamos medicos alfabeticamente
+  Object.keys(arrayMedicos).sort((a, b) => a.localeCompare(b)).forEach(cod => {
+    arrayMedicosSorted[cod] = arrayMedicos[cod];
+  });
+
   const contenido = document.getElementById("contenido");
   contenido.innerHTML = "";
 
-  Object.entries(arrayMedicos).forEach(([cod, d]) => {
+  Object.entries(arrayMedicosSorted).forEach(([cod, d]) => {
     contenido.innerHTML += `
-      <div
-        style="width: 70px; min-width: 70px"
-        class="d-flex flex-column align-items-center py-1 px-3 bg-white border rounded small lh-sm"
-        title="${d.nombre} - ${d.total}"
-      >
-        <span class="fw-bold small">${cod}</span>
-        <span class="small">${d.total}</span>
+      <div>
+        <input type="checkbox" name="filtro-medico" id="cc-${cod}" value="${cod}" class="d-none">
+        <label class="filtro-type-card-side" for="cc-${cod}" title="${d.nombre} - ${d.total}">
+          <span class="filtro-type-label-side">${cod}</span>
+          <div class="filtro-type-content-side">
+            <span class="filtro-type-icon-side">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8m-3.38 1.922l.374-.549a7 7 0 0 0 2.895.627h.223a7 7 0 0 0 2.505-.464l.263.386c.122.18.245.53.327.973c.08.427.102.832.087 1.055a.8.8 0 0 0 .04.3h-.378a.76.76 0 0 0-.688.439l-.691 1.48a.76.76 0 0 0 .689 1.081H15.4v-1.5h1.25v1.5h1.084a.76.76 0 0 0 .689-1.081l-.69-1.48a.76.76 0 0 0-.69-.439h-.293a.8.8 0 0 0 .04-.2c.026-.378-.012-.912-.108-1.43c-.093-.502-.262-1.101-.562-1.542l-.049-.072a2 2 0 0 1 .152-.006A4.777 4.777 0 0 1 21 16.777V21H3v-4.223c0-2.52 1.95-4.584 4.424-4.764l-.044.065c-.591.869-.681 1.946-.608 2.81c.025.297.07.59.132.866a1.5 1.5 0 1 0 1.47-.302a5 5 0 0 1-.108-.69c-.06-.706.04-1.379.354-1.84"/></svg>
+            </span> 
+            <span class="filtro-type-value-side" id="contador-${cod}">${d.total}</span>
+          </div>
+        </label>
       </div>
     `;
   });
@@ -82,96 +99,17 @@ function setContadores(contadores) {
   $("#nt4").text(contadores.triage[4]);
   $("#nt5").text(contadores.triage[5]);
 
-  $("#shur").html(contadores.sinHurge);
-  $("#stria").html(contadores.sinAdmision);
-  $("#tadm").html(contadores.general);
-  $("#adv").html(contadores.alertas);
-  $("#chombre").html(contadores.hombres);
-  $("#cmujer").html(contadores.mujeres);
-}
-
-/**
- * Aquí se canculan y cargan los promedios en minutos entre los diferentes tipos
- * de triage.
-*/
-function calcularPromedios(data) {
-  const promedios = {
-    triageAdmision: {1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    triageEgreso:   {1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    // El 0 en el triage son para las admisiones SIN triage
-    admisionEgreso: {0:[0,0],1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    admisionHurge:  {0:[0,0],1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]}
-  };
-
-  data.forEach(({ clase_triage, steps }) => {
-    const {triage,admision,hurge,egreso} = steps;
-
-    // Triage contra admisión
-    if (clase_triage && admision.fecha) {
-      promedios.triageAdmision[clase_triage][0] += triage.diff / 60;
-      promedios.triageAdmision[clase_triage][1]++;
-    }
-
-    // Admisión contra Hoja de Urgencias
-    if (admision.fecha && hurge.fecha) {
-      promedios.admisionHurge[clase_triage][0] += admision.diff / 60;
-      promedios.admisionHurge[clase_triage][1]++;
-    }
-
-    if (! egreso.fecha) return;
-
-    // Cálculos triage vs egreso
-    if (triage.fecha) {
-      promedios.triageEgreso[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60;
-      promedios.triageEgreso[clase_triage][1]++;
-    }
-
-    // Cálculo de admisión vs egreso
-    if (admision.fecha) {
-      promedios.admisionEgreso[clase_triage][0] += (egreso.timestamp - admision.timestamp) / 60;
-      promedios.admisionEgreso[clase_triage][1]++;
-    }
-  });
-
-  const calcularPromedio = ([dividendo, divisor]) => {
-    const x = dividendo / divisor;
-    return isNaN(x) ? 0 : x.toFixed(1);
-  }
-
-  const ta = promedios.triageAdmision;
-  $("#ta5").text(calcularPromedio(ta[5]));
-  $("#ta4").text(calcularPromedio(ta[4]));
-  $("#ta3").text(calcularPromedio(ta[3]));
-  $("#ta2").text(calcularPromedio(ta[2]));
-  $("#ta1").text(calcularPromedio(ta[1]));
-
-  const au = promedios.admisionHurge;
-  $("#t5").text(calcularPromedio(au[5]));
-  $("#t4").text(calcularPromedio(au[4]));
-  $("#t3").text(calcularPromedio(au[3]));
-  $("#t2").text(calcularPromedio(au[2]));
-  $("#t1").text(calcularPromedio(au[1]));
-  $("#t0").text(calcularPromedio(au[0]));
-
-  const te = promedios.triageEgreso;
-  $("#te5").text(calcularPromedio(te[5]));
-  $("#te4").text(calcularPromedio(te[4]));
-  $("#te3").text(calcularPromedio(te[3]));
-  $("#te2").text(calcularPromedio(te[2]));
-  $("#te1").text(calcularPromedio(te[1]));
-
-  const ae = promedios.admisionEgreso;
-  $("#ae5").text(calcularPromedio(ae[5]));
-  $("#ae4").text(calcularPromedio(ae[4]));
-  $("#ae3").text(calcularPromedio(ae[3]));
-  $("#ae2").text(calcularPromedio(ae[2]));
-  $("#ae1").text(calcularPromedio(ae[1]));
-  $("#ae0").text(calcularPromedio(ae[0]));
+  $("#contador-no-emergency").html(contadores.sinHurge);
+  $("#contador-no-admission").html(contadores.sinAdmision);
+  $("#contador-admission").html(contadores.general);
+  $("#contador-warning").html(contadores.alertas);
+  $("#contador-man").html(contadores.hombres);
+  $("#contador-woman").html(contadores.mujeres);
 }
 
 async function fetchDatosEstadistica(f) {
   return await $.ajax({
-    url: "./CargarHurgencias.php",
+    url: "./estadisticas",
     dataType: "json",
     method: "POST",
     data: {
@@ -185,7 +123,7 @@ function listar(data) {
 
   return $("#gridEst").DataTable({
     language: {
-      url: "//cdn.datatables.net/plug-ins/2.2.2/i18n/es-MX.json",
+      url: "es-MX.json",
     },
     scrollY: "50vh",
     scrollX: true,

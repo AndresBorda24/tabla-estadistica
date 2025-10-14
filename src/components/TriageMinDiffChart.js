@@ -1,0 +1,208 @@
+import ApexCharts from "apexcharts";
+
+export default () => ({
+	/** @type chart ApexCharts */
+	chart: null,
+	promedios: {
+		triageAdmision: {
+			title: 'TRIAGE vs Admisión',
+			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+		},
+		triageEgreso: {
+			title: 'TRIAGE vs Egreso',
+			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+		},
+		// El 0 en el triage son para las admisiones SIN triage
+		admisionEgreso: {
+			title: 'Admisión vs Egreso',
+			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+		},
+		admisionHurge: {
+			title: 'Admisión vs Hoja Urgencias',
+			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+		},
+	},
+
+	init() {
+		this.chart = new ApexCharts(
+			this.$el.querySelector('div[chart]'),
+			this.getOptionsForChat()
+		);
+
+		this.chart.render();
+	},
+
+	/**  
+	 * Listener para evento de refresh de información en tabla.
+	 * @param event {CustomEvent}  
+	 */
+	handleRefreshData(event) {
+		this.setUpData(event.detail);
+		this.updateChartSeries();
+	},
+
+	/**
+	 * Ordena la información sumando los minutos y el total para cada uno de los 
+	 * casos. No realiza el calculo del promedio.
+	 * @param data {Object[]}
+	 */ 
+	setUpData(data) {
+		data.forEach(({ clase_triage, steps }) => {
+			const { triage, admision, hurge, egreso } = steps;
+
+			// Triage contra admisión
+			if (clase_triage && admision.fecha) {
+				this.promedios.triageAdmision.data[clase_triage][0] += triage.diff / 60;
+				this.promedios.triageAdmision.data[clase_triage][1]++;
+			}
+
+			// Admisión contra Hoja de Urgencias
+			if (admision.fecha && hurge.fecha) {
+				this.promedios.admisionHurge.data[clase_triage][0] += admision.diff / 60;
+				this.promedios.admisionHurge.data[clase_triage][1]++;
+			}
+
+			if (!egreso.fecha) return;
+
+			// Cálculos triage vs egreso
+			if (triage.fecha) {
+				this.promedios.triageEgreso.data[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60;
+				this.promedios.triageEgreso.data[clase_triage][1]++;
+			}
+
+			// Cálculo de admisión vs egreso
+			if (admision.fecha) {
+				this.promedios.admisionEgreso.data[clase_triage][0] += (egreso.timestamp - admision.timestamp) / 60;
+				this.promedios.admisionEgreso.data[clase_triage][1]++;
+			}
+		});
+	},
+
+	/** Actualiza las series de la gráfica con los nuevos datos */
+	updateChartSeries() {
+		this.chart.updateOptions({
+			series: this.buildSeriesForChart(),
+			annotations: this.buildAnnotatinsForChart()
+		});
+	},
+
+	/** Genera la configuración por defecto para la gráfica. */
+	getOptionsForChat() {
+		return {
+			series: this.buildSeriesForChart(),
+			annotations: this.buildAnnotatinsForChart(),
+			chart: {
+				type: 'bar',
+				height: 700,
+			},
+			plotOptions: {
+				bar: {
+					horizontal: true,
+					columnWidth: '300px',
+					borderRadius: 5,
+					borderRadiusApplication: 'end',
+				},
+
+			},
+			stroke: {
+				show: true,
+				width: 2,
+				colors: ['transparent']
+			},
+			xaxis: {
+				categories: [
+					this.promedios.triageAdmision.title,
+					this.promedios.triageEgreso.title,
+					this.promedios.admisionHurge.title,
+					this.promedios.admisionEgreso.title
+				],
+				title: {
+					text: 'Minutos'
+				}
+			},
+			yaxis: {},
+			fill: {
+				opacity: 1
+			},
+			tooltip: {
+        shared: true,
+        intersect: false,
+				y: {
+					formatter: function (val) {
+						return val + " minutos."
+					}
+				}
+			}
+		};
+	},
+
+	/** Genera las series para la gráfica */
+	buildSeriesForChart() {
+		const seriesName = {
+			0: 'Sin Triage',
+			1: 'Triage 1',
+			2: 'Triage 2',
+			3: 'Triage 3',
+			4: 'Triage 4',
+			5: 'Triage 5'
+		};
+
+		const series = Object.entries(seriesName).reduce((prev, [id, name]) => {
+			id = parseInt(id);
+
+			prev.push({
+				name: name, 
+				data: [
+					this.calcularPromedio(this.promedios.triageAdmision.data[id]),
+					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
+					this.calcularPromedio(this.promedios.admisionHurge.data[id]),
+					this.calcularPromedio(this.promedios.admisionEgreso.data[id])
+				],
+				goals: [{
+	        name: 'Expected',
+	        value: 54,
+	        strokeWidth: 5,
+	        strokeHeight: 10,
+	        strokeColor: '#775DD0'
+	      }]			
+	    });
+
+			return prev;
+		}, []);
+
+		return series;
+	},
+
+	buildAnnotatinsForChart() {
+		const yaxis = Object.keys(this.promedios).map((key) => {
+			const averageData = Object.values(this.promedios[key].data)
+			const totalMinutes = averageData.reduce((x, data) => {
+				x += parseFloat(this.calcularPromedio(data));
+				return x;
+			}, 0);
+
+			const totalItems = (['triageEgreso', 'triageAdmision'].includes(key)) 
+				? averageData.length - 1
+				: averageData.length;
+
+			const average = totalMinutes / totalItems;
+
+			return {
+				y: this.promedios[key].title,
+				label: {
+					text: `Promedio: ${average.toFixed(1)} minutos.`
+				}
+			}
+		});
+
+
+		console.log(yaxis);
+		return { yaxis };
+  },
+
+	/** Helper para calcular promedio */
+	calcularPromedio([dividendo, divisor]) {
+		const x = dividendo / divisor;
+		return isNaN(x) ? 0 : x.toFixed(1);
+	}
+});

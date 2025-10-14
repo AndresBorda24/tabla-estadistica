@@ -274,3 +274,46 @@ function setUpTriageFilter(table) {
     return parsedQuery === triage;
   });
 }
+
+/** Establece los eventos y la función de filtrado para los diferentes typos (hombre,mujer,advertencia...). */ 
+function setUpTypeFilter(table) {
+  // Listener para radios y filtrado por triage
+  document.querySelectorAll('input[type="checkbox"][name="filtro-type"]').forEach(el => {
+    el.addEventListener('change', () => TABLA.draw());
+  })
+
+  // Filtro para triage
+  table.search.fixed('filtertype', function (searchStr, data, index) {
+    const checked = []; 
+    document.querySelectorAll('input[name="filtro-type"]:checked').forEach(el => checked.push(el.value));
+    if ([0,6].includes(checked.length)) return true;
+
+    const cases = {
+      "warning": (item) => item.alerta,
+      "man": (item) => item.paciente.genero === 'M',
+      "woman": (item) => item.paciente.genero === 'F',
+      "admission": (item) => Boolean(item.steps.admision.fecha),
+      "no-admission": (item) => ! Boolean(item.steps.admision.fecha),
+      "no-emergency": (item) => Boolean(item.steps.admision.fecha) && ! Boolean(item.steps.hurge.fecha)
+    };
+
+    return checked.some(c => cases[c](data));
+  });
+}
+
+/** Establece los eventos y la función de filtrado para los diferentes typos (hombre,mujer,advertencia...). */ 
+function setUpDoctorFilter(table) {
+  document.querySelectorAll('input[type="checkbox"][name="filtro-medico"]').forEach(el => {
+    el.addEventListener('change', () => TABLA.draw());
+  });
+
+  // Filtro para triage
+  table.search.fixed('filterdoctor', function (searchStr, data, index) {
+    const checked = []; 
+    const totalMedicos = document.querySelectorAll('input[name="filtro-medico"]').length;
+    document.querySelectorAll('input[name="filtro-medico"]:checked').forEach(el => checked.push(el.value));
+
+    if ([0,totalMedicos].includes(checked.length)) return true;
+    return checked.some(c => data.medico?.cod === c);
+  });
+}

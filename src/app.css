@@ -147,7 +147,7 @@ table.dataTable tbody tr td {
 }
 
 .main-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -279,3 +279,67 @@ table.dataTable tbody tr td {
   float: right;
   margin-right: 1rem;
 }
+
+/* Estilos para indicadores / contadores */
+.indicators-container {
+    padding-bottom: 1rem;
+    overflow-x: auto;
+}
+
+/* Versión compacta con icono al lado del número */
+.filtro-type-card-side {
+  min-width: 90px;
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: background-color 0.2s, color 0.2s;
+  cursor: pointer;
+  border-radius: 3px;
+  text-decoration: none;
+  color: #362F35;
+}
+
+.filtro-type-label-side {
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  line-height: 1.2;
+  width: 100%;
+}
+
+.filtro-type-content-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+}
+
+.filtro-type-icon-side {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  line-height: 0;
+}
+
+.filtro-type-value-side {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.filtro-type-card-side:hover {
+  background-color: #eeeeee;
+}
+
+input[type="checkbox"][name="filtro-medico"]:checked + label,
+input[type="checkbox"][name="filtro-type"]:checked + label{
+  color: #ffffff;
+  background-color: #1f7cd5;
+}
+.filtro-type-pending {
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+}
+

@@ -117,7 +117,7 @@ class InfoLoaderService
         $this->contadores->addGeneral();
         (!$docn) && $this->contadores->addSinAdmision();
         $this->contadores->addTriage($infoTriage->triage);
-        (!$hurge->strTime) && $this->contadores->addSinHurge();
+        ($docn && !$hurge->strTime) && $this->contadores->addSinHurge();
         ($paciente->genero === "F")
             ? $this->contadores->addMujer()
             : $this->contadores->addHombre();
