@@ -10,9 +10,6 @@
     integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
     crossorigin="anonymous"
   >
-  <link rel="stylesheet" href="assets/estadisticas.css" />
-  <!-- <link rel="stylesheet" href="//unicons.iconscout.com/release/v3.0.6/css/line.css"> -->
-  <link href="//cdn.jsdelivr.net/npm/@sweetalert2/theme-dark@4/dark.css" rel="stylesheet">
   <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css" />
   <link
     rel="stylesheet"
@@ -24,14 +21,18 @@
     href="https://cdn.datatables.net/buttons/3.2.5/css/buttons.dataTables.min.css"
   >
   <!-- jQuery -->
-  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.13.3/jquery-ui.min.js"></script> -->
-  <!-- <script src="//cdn.datatables.net/2.2.2/js/dataTables.min.js"></script> -->
   <!-- Estadisticas -->
   <script src="./assets/estadisticas.js"></script>
   <script src="./assets/v2/app.js" defer></script>
-  <title>Estadisticas</title>
+
+  <?php if(App\Config::isProduction()): echo $vite->tags() ?>
+  <?php else: ?>
+    <script type="module" src="<?= \App\Config::get('assets_dev_url') ?>/@vite/client"></script>
+    <script type="module" src="<?= \App\Config::get('assets_dev_url') ?>/src/main.js"></script> 
+  <?php endif ?>
+
+  <title>Estadísticas</title>
 </head>
 <body>
   <div class="gateway-background"></div>
@@ -63,9 +64,9 @@
       <?= $this->fetch('./partials/filtro-tipos.php') ?>
     </div>
 
-    <div class="d-flex mb-4 position-relative">
+    <div class="d-flex position-relative">
       <!-- Grilla -->
-      <div class="rounded border py-3 px-0 flex-grow-1 w-100 bg-body-tertiary">
+      <div class="rounded border pt-2 pb-1 px-0 flex-grow-1 w-100 bg-body-tertiary">
         <div class="text-center" id="cargaInfo">
           <div class="spinner-border text-success" role="status">
             <span class="sr-only">Loading...</span>
@@ -94,43 +95,20 @@
     </div>
 
     <?php if((int) $user->medicoId === 0): ?>
-      <div>
-        <span class="fw-bold small">Atenciones x Medico</span>
+      <div class="bg-body-tertiary rounded-bottom border small mb-4" style="
+        padding-top: 1rem;
+        padding-bottom: 6px;
+        margin-top: -0.8rem;
+      ">
+        <span class="fw-bold small d-inline-block ms-2">Atenciones x Medico</span>
         <div
           id="contenido"
-          class="d-flex overflow-x-auto gap-3 mb-4 pb-2"
+          class="d-flex overflow-x-auto gap-3 px-2"
         ></div>
       </div>
     <?php endif ?>
 
-    <div class="d-flex flex-column flex-lg-row gap-4">
-      <div>
-        <span class="fw-bold small">Conteo Triage</span>
-        <div class="d-flex flex-column rounded border overflow-hidden small">
-          <span class="bg-white border-bottom d-block small px-3 py-1">Sin Triage: <b id="nt0" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 1: <b id="nt1" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 2: <b id="nt2" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 3: <b id="nt3" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 4: <b id="nt4" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white d-block small px-3 py-1">Triage 5: <b id="nt5" class="d-inline-block ms-2"></b></span>
-        </div>
-      </div>
-
-      <div>
-        <span class="fw-bold small">Promedio en Minútos: TRIAGE vs Admisión</span>
-        <div id="prom-admi-triage" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-        <span class="fw-bold small">Promedio en Minútos: Admisión vs Hoja Urgencias</span>
-        <div id="prom-admi-hurge" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-
-        <span class="fw-bold small">Promedio en Minútos: Triage vs Egreso</span>
-        <div id="prom-triage-egreso" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-        <span class="fw-bold small">Promedio en Minútos: Admisión vs Egreso</span>
-        <div id="prom-admision-egreso" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-      </div>
-    </div>
+    <?= $this->fetch('./partials/TriageMinDiffChart.php') ?>
   </div>
 
   <div class="fixed-top vh-100 vw-100 d-flex bg-dark" id="full-loader">
@@ -184,7 +162,6 @@
     </div>
   </div>
 
-  <!-- <script src="//cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script> -->
   <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

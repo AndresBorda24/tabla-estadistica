@@ -147,7 +147,7 @@ table.dataTable tbody tr td {
 }
 
 .main-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -333,6 +333,7 @@ table.dataTable tbody tr td {
   background-color: #eeeeee;
 }
 
+input[type="checkbox"][name="filtro-medico"]:checked + label,
 input[type="checkbox"][name="filtro-type"]:checked + label{
   color: #ffffff;
   background-color: #1f7cd5;
