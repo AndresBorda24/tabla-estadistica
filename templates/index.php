@@ -28,8 +28,8 @@
 
   <?php if(App\Config::isProduction()): echo $vite->tags() ?>
   <?php else: ?>
-    <script type="module" src="http://192.168.1.16:5173/@vite/client"></script>
-    <script type="module" src="http://192.168.1.16:5173/src/main.js"></script> 
+    <script type="module" src="<?= \App\Config::get('assets_dev_url') ?>/@vite/client"></script>
+    <script type="module" src="<?= \App\Config::get('assets_dev_url') ?>/src/main.js"></script> 
   <?php endif ?>
 
   <title>Estadísticas</title>

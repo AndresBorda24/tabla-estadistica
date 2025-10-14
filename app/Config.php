@@ -17,7 +17,8 @@ class Config
 
         self::$config = [
             'app_env'   => $_ENV['APP_ENV'] ?? 'development',
-            'app_base_path' => $_ENV['APP_BASE_PATH'] ?? ''
+            'app_base_path' => $_ENV['APP_BASE_PATH'] ?? '',
+            'assets_dev_url' => $_ENV['ASSETS_DEV_URL'] ?? 'http://localhost'
         ];
     }
 
