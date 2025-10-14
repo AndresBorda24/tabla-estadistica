@@ -3,3 +3,4 @@ node_modules
 mock-data.json
 .env
 public/src
+.vite

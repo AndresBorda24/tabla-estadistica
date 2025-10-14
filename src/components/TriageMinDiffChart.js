@@ -157,15 +157,8 @@ export default () => ({
 					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
 					this.calcularPromedio(this.promedios.admisionHurge.data[id]),
 					this.calcularPromedio(this.promedios.admisionEgreso.data[id])
-				],
-				goals: [{
-	        name: 'Expected',
-	        value: 54,
-	        strokeWidth: 5,
-	        strokeHeight: 10,
-	        strokeColor: '#775DD0'
-	      }]			
-	    });
+				]	
+	    	});
 
 			return prev;
 		}, []);
@@ -175,18 +168,17 @@ export default () => ({
 
 	buildAnnotatinsForChart() {
 		const yaxis = Object.keys(this.promedios).map((key) => {
+			let totalItems = 0;
 			const averageData = Object.values(this.promedios[key].data)
-			const totalMinutes = averageData.reduce((x, data) => {
-				x += parseFloat(this.calcularPromedio(data));
+			const totalMinutes = averageData.reduce((x, [minutos,total]) => {
+				if (total === 0) return x;
+
+				x += parseFloat(this.calcularPromedio([minutos, total]));
+				totalItems++;
 				return x;
 			}, 0);
 
-			const totalItems = (['triageEgreso', 'triageAdmision'].includes(key)) 
-				? averageData.length - 1
-				: averageData.length;
-
 			const average = totalMinutes / totalItems;
-
 			return {
 				y: this.promedios[key].title,
 				label: {
@@ -195,10 +187,8 @@ export default () => ({
 			}
 		});
 
-
-		console.log(yaxis);
 		return { yaxis };
-  },
+  	},
 
 	/** Helper para calcular promedio */
 	calcularPromedio([dividendo, divisor]) {
