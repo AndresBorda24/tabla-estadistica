@@ -64,7 +64,7 @@
       <?= $this->fetch('./partials/filtro-tipos.php') ?>
     </div>
 
-    <div class="d-flex mb-4 position-relative">
+    <div class="d-flex position-relative">
       <!-- Grilla -->
       <div class="rounded border py-3 px-0 flex-grow-1 w-100 bg-body-tertiary">
         <div class="text-center" id="cargaInfo">
@@ -95,11 +95,15 @@
     </div>
 
     <?php if((int) $user->medicoId === 0): ?>
-      <div>
-        <span class="fw-bold small">Atenciones x Medico</span>
+      <div class="bg-body-tertiary rounded-bottom border small mb-4" style="
+        padding-top: 1rem;
+        padding-bottom: 6px;
+        margin-top: -0.8rem;
+      ">
+        <span class="fw-bold small d-inline-block ms-2">Atenciones x Medico</span>
         <div
           id="contenido"
-          class="d-flex overflow-x-auto gap-3 mb-4 pb-2"
+          class="d-flex overflow-x-auto gap-3 px-2"
         ></div>
       </div>
     <?php endif ?>
