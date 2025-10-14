@@ -47,6 +47,7 @@ function cagarDatos({ data, contadores }) {
 /** Se encarga de pone los valores de "Atenciones x Medico" */
 function calcularAtencionesPorMedico(data) {
   const arrayMedicos = {};
+  const arrayMedicosSorted = {};
 
   data.forEach(({ medico }) => {
     if (!medico) return;
@@ -62,10 +63,15 @@ function calcularAtencionesPorMedico(data) {
     arrayMedicos[cod].total++;
   });
 
+  // Ordenamos medicos alfabeticamente
+  Object.keys(arrayMedicos).sort((a, b) => a.localeCompare(b)).forEach(cod => {
+    arrayMedicosSorted[cod] = arrayMedicos[cod];
+  });
+
   const contenido = document.getElementById("contenido");
   contenido.innerHTML = "";
 
-  Object.entries(arrayMedicos).forEach(([cod, d]) => {
+  Object.entries(arrayMedicosSorted).forEach(([cod, d]) => {
     contenido.innerHTML += `
       <div>
         <input type="checkbox" name="filtro-medico" id="cc-${cod}" value="${cod}" class="d-none">
