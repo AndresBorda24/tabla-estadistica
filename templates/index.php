@@ -28,8 +28,8 @@
 
   <?php if(App\Config::isProduction()): echo $vite->tags() ?>
   <?php else: ?>
-    <script type="module" src="http://localhost:5173/@vite/client"></script>
-    <script type="module" src="http://localhost:5173/src/main.js"></script> 
+    <script type="module" src="http://192.168.1.16:5173/@vite/client"></script>
+    <script type="module" src="http://192.168.1.16:5173/src/main.js"></script> 
   <?php endif ?>
 
   <title>Estadísticas</title>
@@ -66,7 +66,7 @@
 
     <div class="d-flex position-relative">
       <!-- Grilla -->
-      <div class="rounded border py-3 px-0 flex-grow-1 w-100 bg-body-tertiary">
+      <div class="rounded border pt-2 pb-1 px-0 flex-grow-1 w-100 bg-body-tertiary">
         <div class="text-center" id="cargaInfo">
           <div class="spinner-border text-success" role="status">
             <span class="sr-only">Loading...</span>
@@ -108,34 +108,7 @@
       </div>
     <?php endif ?>
 
-    <div class="d-flex flex-column flex-lg-row gap-4">
-      <div>
-        <span class="fw-bold small">Conteo Triage</span>
-        <div class="d-flex flex-column rounded border overflow-hidden small">
-          <span class="bg-white border-bottom d-block small px-3 py-1">Sin Triage: <b id="nt0" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 1: <b id="nt1" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 2: <b id="nt2" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 3: <b id="nt3" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white border-bottom d-block small px-3 py-1">Triage 4: <b id="nt4" class="d-inline-block ms-2"></b></span>
-          <span class="bg-white d-block small px-3 py-1">Triage 5: <b id="nt5" class="d-inline-block ms-2"></b></span>
-        </div>
-      </div>
-
-      <div>
-        <span class="fw-bold small">Promedio en Minútos: TRIAGE vs Admisión</span>
-        <div id="prom-admi-triage" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-        <span class="fw-bold small">Promedio en Minútos: Admisión vs Hoja Urgencias</span>
-        <div id="prom-admi-hurge" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-
-        <span class="fw-bold small">Promedio en Minútos: Triage vs Egreso</span>
-        <div id="prom-triage-egreso" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-
-        <span class="fw-bold small">Promedio en Minútos: Admisión vs Egreso</span>
-        <div id="prom-admision-egreso" class="d-flex overflow-x-auto gap-3 mb-2 pb-2"></div>
-      </div>
-    </div>
+    <?= $this->fetch('./partials/TriageMinDiffChart.php') ?>
   </div>
 
   <div class="fixed-top vh-100 vw-100 d-flex bg-dark" id="full-loader">

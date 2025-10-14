@@ -28,8 +28,6 @@ function cagarDatos({ data, contadores }) {
   // Medicos
   calcularAtencionesPorMedico(data);
   setUpDoctorFilter(TABLA);
-  // Promedios de atención
-  calcularPromedios(data);
   // Conteo de los triage
   setContadores(contadores);
 
@@ -107,85 +105,6 @@ function setContadores(contadores) {
   $("#contador-warning").html(contadores.alertas);
   $("#contador-man").html(contadores.hombres);
   $("#contador-woman").html(contadores.mujeres);
-}
-
-/**
- * Aquí se canculan y cargan los promedios en minutos entre los diferentes tipos
- * de triage.
-*/
-function calcularPromedios(data) {
-  const promedios = {
-    triageAdmision: {1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    triageEgreso:   {1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    // El 0 en el triage son para las admisiones SIN triage
-    admisionEgreso: {0:[0,0],1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]},
-    admisionHurge:  {0:[0,0],1:[0,0], 2:[0,0], 3:[0,0], 4:[0,0], 5:[0,0]}
-  };
-
-  data.forEach(({ clase_triage, steps }) => {
-    const {triage,admision,hurge,egreso} = steps;
-
-    // Triage contra admisión
-    if (clase_triage && admision.fecha) {
-      promedios.triageAdmision[clase_triage][0] += triage.diff / 60;
-      promedios.triageAdmision[clase_triage][1]++;
-    }
-
-    // Admisión contra Hoja de Urgencias
-    if (admision.fecha && hurge.fecha) {
-      promedios.admisionHurge[clase_triage][0] += admision.diff / 60;
-      promedios.admisionHurge[clase_triage][1]++;
-    }
-
-    if (! egreso.fecha) return;
-
-    // Cálculos triage vs egreso
-    if (triage.fecha) {
-      promedios.triageEgreso[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60;
-      promedios.triageEgreso[clase_triage][1]++;
-    }
-
-    // Cálculo de admisión vs egreso
-    if (admision.fecha) {
-      promedios.admisionEgreso[clase_triage][0] += (egreso.timestamp - admision.timestamp) / 60;
-      promedios.admisionEgreso[clase_triage][1]++;
-    }
-  });
-
-  const calcularPromedio = ([dividendo, divisor]) => {
-    const x = dividendo / divisor;
-    return isNaN(x) ? 0 : x.toFixed(1);
-  }
-
-  const ta = promedios.triageAdmision;
-  $("#ta5").text(calcularPromedio(ta[5]));
-  $("#ta4").text(calcularPromedio(ta[4]));
-  $("#ta3").text(calcularPromedio(ta[3]));
-  $("#ta2").text(calcularPromedio(ta[2]));
-  $("#ta1").text(calcularPromedio(ta[1]));
-
-  const au = promedios.admisionHurge;
-  $("#t5").text(calcularPromedio(au[5]));
-  $("#t4").text(calcularPromedio(au[4]));
-  $("#t3").text(calcularPromedio(au[3]));
-  $("#t2").text(calcularPromedio(au[2]));
-  $("#t1").text(calcularPromedio(au[1]));
-  $("#t0").text(calcularPromedio(au[0]));
-
-  const te = promedios.triageEgreso;
-  $("#te5").text(calcularPromedio(te[5]));
-  $("#te4").text(calcularPromedio(te[4]));
-  $("#te3").text(calcularPromedio(te[3]));
-  $("#te2").text(calcularPromedio(te[2]));
-  $("#te1").text(calcularPromedio(te[1]));
-
-  const ae = promedios.admisionEgreso;
-  $("#ae5").text(calcularPromedio(ae[5]));
-  $("#ae4").text(calcularPromedio(ae[4]));
-  $("#ae3").text(calcularPromedio(ae[3]));
-  $("#ae2").text(calcularPromedio(ae[2]));
-  $("#ae1").text(calcularPromedio(ae[1]));
-  $("#ae0").text(calcularPromedio(ae[0]));
 }
 
 async function fetchDatosEstadistica(f) {

@@ -1,13 +1,10 @@
 import './app.css';
+import TriageMinDiffChart from './components/TriageMinDiffChart';
 import Alpine from 'alpinejs';
 window.Alpine = Alpine
  
 document.addEventListener('alpine:init', () => {
-	Alpine.data('test', () => ({
-		init() {
-			console.log('esto es un componente de alpinejs');
-		}
-	}));
-})
+	Alpine.data('TriageMinDiffChart', TriageMinDiffChart);
+});
 
-Alpine.start()
+Alpine.start();
