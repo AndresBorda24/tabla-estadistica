@@ -333,6 +333,7 @@ table.dataTable tbody tr td {
   background-color: #eeeeee;
 }
 
+input[type="checkbox"][name="filtro-medico"]:checked + label,
 input[type="checkbox"][name="filtro-type"]:checked + label{
   color: #ffffff;
   background-color: #1f7cd5;
