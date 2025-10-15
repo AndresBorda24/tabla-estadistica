@@ -362,3 +362,7 @@ input[type="checkbox"][name="filtro-type"]:checked + label{
     outline: solid 1.5px rgb(235 235 235);
     outline-offset: 2px;
 }
+
+body:has(dialog[open]) {
+  overflow: hidden;
+}

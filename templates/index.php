@@ -115,55 +115,8 @@
     <span class="text-light m-auto">Cargando...</span>
   </div>
 
-  <div
-    id="modal-info-urgencias"
-    style="display: none; z-index: 2000;"
-    class="vw-100 vh-100 bg-black bg-opacity-75 py-4 px-3 position-fixed top-0 start-0 flex"
-  >
-    <div
-      class="m-auto bg-body-tertiary overflow-auto p-3 p-md-4 rounded"
-      style="max-height: 80dvh; width: 450px; max-width: 90vw;"
-    >
-      <div class="d-flex gap-2">
-        <div class="flex-fill lh-1">
-          <span class="d-block fs-5 fw-bold mb-1" id="modal-info-nombre"></span>
-          <p class="small mb-2">
-            <span class="d-block small fw-bold" id="modal-info-cc"></span>
-            <span class="d-block small" id="modal-info-docn"></span>
-          </p>
-          <p class="small text-muted">
-            <span class="d-block small" id="modal-info-edad"></span>
-            <span class="small">Triage</span>
-            <span class="d-inline-block small fw-bold" id="modal-info-triage"></span> </br>
-            <span class="small">Médico</span>
-            <span class="d-inline-block small fw-bold" id="modal-info-medico"></span>
-          </p>
-        </div>
-        <button
-          type="button"
-          id="modal-info-close"
-          class="btn-sm btn-close small mt-1"
-        ></button>
-      </div>
-
-      <div id="modal-info-timeline"></div>
-
-      <span class="small d-block fw-bold">Imágenología</span>
-      <ol id="modal-info-imagenes" class="list-group list-group-numbered small rounded-1 mb-3"> </ol>
-
-      <span class="small d-block fw-bold">Laboratórios</span>
-      <ol id="modal-info-lab" class="list-group list-group-numbered small rounded-1 mb-3"> </ol>
-
-      <span class="small d-block fw-bold">Interconsultas</span>
-      <ol id="modal-info-intercon" class="list-group list-group-numbered small rounded-1 mb-3"> </ol>
-
-      <span class="small d-block fw-bold">Evolucion</span>
-      <ol id="modal-info-evolucion" class="list-group list-group-numbered small rounded-1 mb-3"> </ol>
-    </div>
-  </div>
-
-
   <?= $this->fetch('./partials/ModalUrgencias.php') ?>
+
   <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
