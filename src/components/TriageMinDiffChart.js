@@ -52,27 +52,27 @@ export default () => ({
 
 			// Triage contra admisión
 			if (clase_triage && admision.fecha) {
-				this.promedios.triageAdmision.data[clase_triage][0] += triage.diff / 60;
+				this.promedios.triageAdmision.data[clase_triage][0] += triage.diff / 60 / 60;
 				this.promedios.triageAdmision.data[clase_triage][1]++;
 			}
 
 			// Admisión contra Hoja de Urgencias
 			if (admision.fecha && hurge.fecha) {
-				this.promedios.admisionHurge.data[clase_triage][0] += admision.diff / 60;
+				this.promedios.admisionHurge.data[clase_triage][0] += admision.diff / 60 / 60;
 				this.promedios.admisionHurge.data[clase_triage][1]++;
 			}
 
 			if (!egreso.fecha) return;
 
 			// Cálculos triage vs egreso
-			if (triage.fecha) {
-				this.promedios.triageEgreso.data[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60;
+			if (clase_triage) {
+				this.promedios.triageEgreso.data[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60 / 60;
 				this.promedios.triageEgreso.data[clase_triage][1]++;
 			}
 
 			// Cálculo de admisión vs egreso
 			if (admision.fecha) {
-				this.promedios.admisionEgreso.data[clase_triage][0] += (egreso.timestamp - admision.timestamp) / 60;
+				this.promedios.admisionEgreso.data[clase_triage][0] += (egreso.timestamp - admision.timestamp) / 60 / 60;
 				this.promedios.admisionEgreso.data[clase_triage][1]++;
 			}
 		});
@@ -117,7 +117,7 @@ export default () => ({
 					this.promedios.admisionEgreso.title
 				],
 				title: {
-					text: 'Minutos'
+					text: 'Horas'
 				}
 			},
 			yaxis: {},
@@ -129,7 +129,12 @@ export default () => ({
         intersect: false,
 				y: {
 					formatter: function (val) {
-						return val + " minutos."
+						const parsed = parseFloat(val);
+						const withMinutes = parsed < 1 
+							? ` &#10141; ${parsed * 60} Minutos`
+							: '';
+
+						return val + " Horas" + withMinutes;
 					}
 				}
 			}
@@ -179,10 +184,13 @@ export default () => ({
 			}, 0);
 
 			const average = totalMinutes / totalItems;
+			const withMinutes = average < 1 
+				? ` |  ${(average * 60).toFixed(1)} Minutos`
+				: '';
 			return {
 				y: this.promedios[key].title,
 				label: {
-					text: `Promedio: ${average.toFixed(1)} minutos.`
+					text: `Promedio: ${average.toFixed(1)} horas${withMinutes}`
 				}
 			}
 		});

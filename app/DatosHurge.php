@@ -165,7 +165,7 @@ final class DatosHurge
         );
 
         $data = $x->fetchColumn();
-        return $data ?: null;
+        return $data ? $this->trimUtf8($data) : null;
     }
 
     private function getLatest(array $input): array

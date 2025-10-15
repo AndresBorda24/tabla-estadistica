@@ -36,5 +36,5 @@ class EstadisticasController
 		return new JsonResponse(json_decode(file_get_contents(
 			PROJECT_BASE_PATH . '/mock-data.json'
 		), true));
-	}	
+	}
 }
