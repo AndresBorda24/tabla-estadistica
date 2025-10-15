@@ -22,9 +22,8 @@ class ViewController
 
 	public function __invoke(Response $response, UserSession $user): Response 
 	{
-		return $this->views->render($response, 'index.php', [
-			'user' => $user
-		]);
+		$this->views->addAttribute('user', $user);
+		return $this->views->render($response, 'index.php');
 	}
 }
 

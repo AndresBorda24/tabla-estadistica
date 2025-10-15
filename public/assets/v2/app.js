@@ -17,7 +17,6 @@ $(async function () {
     document.dispatchEvent(
       new CustomEvent('open-modal-urgencias', { detail: data })
     );
-    //showInfoModal(data); // estadisticas.js
   });
 
   const informacion = await fetchDatosEstadistica(today);
@@ -28,11 +27,8 @@ $(async function () {
 });
 
 function cagarDatos({ data, contadores }) {
-  // Medicos
-  calcularAtencionesPorMedico(data);
-  setUpDoctorFilter(TABLA);
-  // Conteo de los triage
-  setContadores(contadores);
+  setUpDoctorFilter(TABLA); // Medicos 
+  setContadores(contadores); // Conteo de los triage
 
   $("#full-loader").remove();
   TABLA.clear();
@@ -43,51 +39,6 @@ function cagarDatos({ data, contadores }) {
   document.dispatchEvent(
     new CustomEvent('table-data-refresh', { detail: data })
   );
-}
-
-/** Se encarga de pone los valores de "Atenciones x Medico" */
-function calcularAtencionesPorMedico(data) {
-  const arrayMedicos = {};
-  const arrayMedicosSorted = {};
-
-  data.forEach(({ medico }) => {
-    if (!medico) return;
-    const { cod, nombre } = medico;
-
-    if (!arrayMedicos.hasOwnProperty(cod)) {
-      arrayMedicos[cod] = {
-        nombre: nombre,
-        total: 0,
-      };
-    }
-
-    arrayMedicos[cod].total++;
-  });
-
-  // Ordenamos medicos alfabeticamente
-  Object.keys(arrayMedicos).sort((a, b) => a.localeCompare(b)).forEach(cod => {
-    arrayMedicosSorted[cod] = arrayMedicos[cod];
-  });
-
-  const contenido = document.getElementById("contenido");
-  contenido.innerHTML = "";
-
-  Object.entries(arrayMedicosSorted).forEach(([cod, d]) => {
-    contenido.innerHTML += `
-      <div>
-        <input type="checkbox" name="filtro-medico" id="cc-${cod}" value="${cod}" class="d-none">
-        <label class="filtro-type-card-side" for="cc-${cod}" title="${d.nombre} - ${d.total}">
-          <span class="filtro-type-label-side">${cod}</span>
-          <div class="filtro-type-content-side">
-            <span class="filtro-type-icon-side">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12 11a4 4 0 1 0 0-8a4 4 0 0 0 0 8m-3.38 1.922l.374-.549a7 7 0 0 0 2.895.627h.223a7 7 0 0 0 2.505-.464l.263.386c.122.18.245.53.327.973c.08.427.102.832.087 1.055a.8.8 0 0 0 .04.3h-.378a.76.76 0 0 0-.688.439l-.691 1.48a.76.76 0 0 0 .689 1.081H15.4v-1.5h1.25v1.5h1.084a.76.76 0 0 0 .689-1.081l-.69-1.48a.76.76 0 0 0-.69-.439h-.293a.8.8 0 0 0 .04-.2c.026-.378-.012-.912-.108-1.43c-.093-.502-.262-1.101-.562-1.542l-.049-.072a2 2 0 0 1 .152-.006A4.777 4.777 0 0 1 21 16.777V21H3v-4.223c0-2.52 1.95-4.584 4.424-4.764l-.044.065c-.591.869-.681 1.946-.608 2.81c.025.297.07.59.132.866a1.5 1.5 0 1 0 1.47-.302a5 5 0 0 1-.108-.69c-.06-.706.04-1.379.354-1.84"/></svg>
-            </span> 
-            <span class="filtro-type-value-side" id="contador-${cod}">${d.total}</span>
-          </div>
-        </label>
-      </div>
-    `;
-  });
 }
 
 /**

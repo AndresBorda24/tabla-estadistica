@@ -1,4 +1,3 @@
-<?php /** @var App\UserSession $user */ ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -94,19 +93,14 @@
       </div>
     </div>
 
-    <?php if((int) $user->medicoId === 0): ?>
-      <div class="bg-body-tertiary rounded-bottom border small mb-4" style="
-        padding-top: 1rem;
-        padding-bottom: 6px;
-        margin-top: -0.8rem;
-      ">
-        <span class="fw-bold small d-inline-block ms-2">Atenciones x Medico</span>
-        <div
-          id="contenido"
-          class="d-flex overflow-x-auto gap-3 px-2"
-        ></div>
-      </div>
-    <?php endif ?>
+    <div class="bg-body-tertiary rounded-bottom border small mb-4" style="
+      padding-top: 1rem;
+      padding-bottom: 6px;
+      margin-top: -0.8rem;
+    ">
+      <span class="fw-bold small d-inline-block ms-2">Atenciones x Medico</span>
+      <?= $this->fetch('./partials/FiltroMedicos.php') ?>
+    </div>
 
     <?= $this->fetch('./partials/TriageMinDiffChart.php') ?>
   </div>
