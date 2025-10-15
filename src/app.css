@@ -343,3 +343,22 @@ input[type="checkbox"][name="filtro-type"]:checked + label{
   border: 1px solid #dee2e6;
 }
 
+.modal-urgencias {
+  border-radius: 5px; 
+  padding: 1rem;
+  border: none;
+  width: 90%;
+  max-width: 630px;
+  & button.btn-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+  }
+}
+.modal-urgencias::backdrop {
+  background-color: #1313139e;
+}
+.modal-urgencias:focus-visible {
+    outline: solid 1.5px rgb(235 235 235);
+    outline-offset: 2px;
+}

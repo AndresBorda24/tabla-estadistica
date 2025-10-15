@@ -162,6 +162,8 @@
     </div>
   </div>
 
+
+  <?= $this->fetch('./partials/ModalUrgencias.php') ?>
   <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/3.2.5/js/dataTables.buttons.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

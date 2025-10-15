@@ -14,7 +14,10 @@ $(async function () {
 
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
-    showInfoModal(data); // estadisticas.js
+    document.dispatchEvent(
+      new CustomEvent('open-modal-urgencias', { detail: data })
+    );
+    //showInfoModal(data); // estadisticas.js
   });
 
   const informacion = await fetchDatosEstadistica(today);
