@@ -13,7 +13,8 @@ class Triage extends BaseStep implements StepInterface
         ?string $time,
         ?string $nextTime,
         /** Determina si se encontró o no la admisión */
-        public readonly bool $admision
+        public readonly bool $admision,
+        public readonly int $turnoId 
     ) {
         parent::__construct($time, $nextTime);
     }

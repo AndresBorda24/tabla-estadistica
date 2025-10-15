@@ -34,12 +34,13 @@ class InfoLoaderService
         $triages = $this->query->getTriages($fechaForGema);
         foreach ($triages as $triage) {
             $paciente = Paciente::fromArray($triage);
-            $docn = $this->query->getDocn($fechaForGema, $paciente->documento);
+            $docn = $triage['docn'] ?: $this->query->getDocn($fechaForGema, $paciente->documento);
             $infoTriage = new Triage(
                 triage: (int) $triage['clase_triage'],
                 time: "$triage[fecha] $triage[hora]",
                 nextTime: null,
-                admision: ($docn !== null)
+                admision: ($docn !== null),
+                turnoId: $triage['turno_id']
             );
 
             $this->handleData($docn, $paciente, $infoTriage);
@@ -69,7 +70,7 @@ class InfoLoaderService
             $paciente = ($infoPaciente)
                 ? Paciente::fromArray($infoPaciente)
                 : new Paciente('', 0, $docn['documento'], 'M');
-            $infoTriage = new Triage(0, null, null, true);
+            $infoTriage = new Triage(0, null, null, true, 0);
 
             $this->handleData((int) $docn['docn'], $paciente, $infoTriage);
         }

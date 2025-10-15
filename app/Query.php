@@ -27,8 +27,8 @@ class Query
     public function getTriages(string $fecha): array
     {
         $triages = $this->db->query("SELECT
-                T.Clas_tria, T.Freg, T.hora, T.Atendido, T.num_histo, P.edad,
-                P.apellido1, P.Apellido2, P.nombre, P.nombre2, P.sexo
+                T.Clas_tria, T.Freg, T.hora, T.Atendido, T.num_histo, T.turno_id, T.docn,
+                P.edad, P.apellido1, P.Apellido2, P.nombre, P.nombre2, P.sexo
             FROM GEMA_MEDICOS\DATOS\TRIAGEV2.dbf AS T
             LEFT JOIN gema10.d\salud\DATOS\sahistoc AS P
                 ON T.num_histo = P.num_histo
@@ -54,7 +54,9 @@ class Query
                 "documento" => $t['num_histo'],
                 "edad"   => $t['edad'],
                 "genero" => $t['sexo'],
-                "nombre" => $nombre
+                "nombre" => $nombre,
+                "turno_id" => (int) $t['turno_id'],
+                "docn" => (int) $t['docn']
             ];
         }, $triages->fetchAll());
     }
