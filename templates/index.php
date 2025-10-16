@@ -76,6 +76,7 @@
             <tr>
               <th></th>
               <th>Paciente</th>
+              <th></th> <!-- Cronometro de Digiturno-->
               <th>Triage</th>
               <!-- <th>Tipo Triage</th> -->
               <th></th> <!-- Cronometro de Triage-->

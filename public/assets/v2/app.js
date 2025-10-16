@@ -114,15 +114,24 @@ function listar(data) {
         data: "paciente.nombre",
         /** @param data {string} */
         render: function (data, type, row, meta) {
-          const { docn, paciente } = row;
+          const { docn, paciente, steps } = row;
+          const { digiturno } = steps;
+
           return `<span class="d-flex flex-column small text-nowrap">
-              <span>${paciente.nombre || "---"}</span>
-              <span class="small text-muted">${paciente.documento} - Edad: ${
-            paciente.edad
-          }</span>
-              <span class="small text-muted">Admisión: ${docn}</span>
+              <span class="fw-semibold">${paciente.nombre || "---"}</span>
+              <span class="small text-muted">
+                ${paciente.documento} - Edad: ${paciente.edad} ${docn ? `- ${docn}` : ''}
+              </span>
+              <span class="small text-muted">
+                Digiturno: <b>${digiturno?.fecha || 'Sin registro'}</b>
+              </span>
             </span>`;
         },
+      },
+      {
+        data: "steps.digiturno.formatedDiff",
+        className: "small position-absolute crono-class border-0 shadow-none w-0 p-0 text-nowrap",
+        orderable: false,
       },
       {
         data: "steps.triage.fecha",
