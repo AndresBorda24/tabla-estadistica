@@ -4,6 +4,10 @@ export default () => ({
 	/** @type chart ApexCharts */
 	chart: null,
 	promedios: {
+		digiturnoEgreso: {
+			title: 'Digiturno vs Egreso',
+			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+		},
 		triageAdmision: {
 			title: 'TRIAGE vs Admisión',
 			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
@@ -48,7 +52,7 @@ export default () => ({
 	 */ 
 	setUpData(data) {
 		data.forEach(({ clase_triage, steps }) => {
-			const { triage, admision, hurge, egreso } = steps;
+			const { triage, admision, hurge, egreso, digiturno } = steps;
 
 			// Triage contra admisión
 			if (clase_triage && admision.fecha) {
@@ -68,6 +72,11 @@ export default () => ({
 			if (clase_triage) {
 				this.promedios.triageEgreso.data[clase_triage][0] += (egreso.timestamp - triage.timestamp) / 60 / 60;
 				this.promedios.triageEgreso.data[clase_triage][1]++;
+			}
+
+			if (digiturno && digiturno.fecha) {
+				this.promedios.digiturnoEgreso.data[clase_triage][0] += (egreso.timestamp - digiturno.timestamp) / 60 / 60;
+				this.promedios.digiturnoEgreso.data[clase_triage][1]++;
 			}
 
 			// Cálculo de admisión vs egreso
@@ -111,6 +120,7 @@ export default () => ({
 			},
 			xaxis: {
 				categories: [
+					this.promedios.digiturnoEgreso.title,
 					this.promedios.triageAdmision.title,
 					this.promedios.triageEgreso.title,
 					this.promedios.admisionHurge.title,
@@ -158,6 +168,7 @@ export default () => ({
 			prev.push({
 				name: name, 
 				data: [
+					this.calcularPromedio(this.promedios.digiturnoEgreso.data[id]),
 					this.calcularPromedio(this.promedios.triageAdmision.data[id]),
 					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
 					this.calcularPromedio(this.promedios.admisionHurge.data[id]),
