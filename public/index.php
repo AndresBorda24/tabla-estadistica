@@ -8,7 +8,14 @@ App\Config::load(PROJECT_BASE_PATH);
 
 // Contenedor de dependencias 
 $container = new \DI\Container([
-	\Slim\Views\PhpRenderer::class => fn() => new \Slim\Views\PhpRenderer(PROJECT_BASE_PATH.'/templates')
+	\Slim\Views\PhpRenderer::class => fn() => new \Slim\Views\PhpRenderer(PROJECT_BASE_PATH.'/templates'),
+	\Medoo\Medoo::class => fn() => new \Medoo\Medoo([
+		'type' => 'mysql',
+		'host' => App\Config::get('db.host'),
+		'database' => App\Config::get('db.database'),
+		'username' => App\Config::get('db.username'),
+		'password' => App\Config::get('db.password')
+	])
 ]);
 
 $app = \DI\Bridge\Slim\Bridge::create($container);

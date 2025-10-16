@@ -18,7 +18,11 @@ class Config
         self::$config = [
             'app_env'   => $_ENV['APP_ENV'] ?? 'development',
             'app_base_path' => $_ENV['APP_BASE_PATH'] ?? '',
-            'assets_dev_url' => $_ENV['ASSETS_DEV_URL'] ?? 'http://localhost'
+            'assets_dev_url' => $_ENV['ASSETS_DEV_URL'] ?? 'http://localhost',
+            'db.host' => $_ENV['DB_HOST'] ?? 'localhost',
+            'db.database' => $_ENV['DB_DATABASE'] ?? 'database',
+            'db.username' => $_ENV['DB_USERNAME'] ?? 'root',
+            'db.password' => $_ENV['DB_PASSWORD'] ?? ''
         ];
     }
 

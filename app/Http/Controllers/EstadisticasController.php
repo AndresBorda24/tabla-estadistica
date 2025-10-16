@@ -21,7 +21,7 @@ class EstadisticasController
 		$fecha = $fechaPost ?: $fechaGet ?: date('Y-m-d');
 		$fechaForGema = date('m.d.y', strtotime($fecha));
 
-		$loaderService->loadWithTriage($fechaForGema);
+		$loaderService->loadWithTriage($fechaForGema, true);
 		$loaderService->loadWithoutTriage($fechaForGema);
 
 		return new JsonResponse($loaderService->getData());

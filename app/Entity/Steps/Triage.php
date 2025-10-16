@@ -37,4 +37,18 @@ class Triage extends BaseStep implements StepInterface
             default => false
         };
     }
+
+    public function toArray(): array
+    {
+        return [
+            "turno" => $this->turnoId,
+            "fecha" => $this->getFormattedTime(),
+            "diff"  => $this->getDiffInSeconds(),
+            "timestamp" => $this->time->getTimestamp(),
+            "formatedDiff" => $this->getDiffFormatted(),
+            "warning" => ($this instanceof StepInterface)
+                ? $this->warning()
+                : null
+        ];
+    }
 }
