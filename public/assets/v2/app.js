@@ -55,7 +55,7 @@ function setContadores(contadores) {
 
   $("#contador-no-emergency").html(contadores.sinHurge);
   $("#contador-no-admission").html(contadores.sinAdmision);
-  $("#contador-admission").html(contadores.general);
+  $("#contador-admission").html(contadores.general - contadores.sinAdmision);
   $("#contador-warning").html(contadores.alertas);
   $("#contador-man").html(contadores.hombres);
   $("#contador-woman").html(contadores.mujeres);
