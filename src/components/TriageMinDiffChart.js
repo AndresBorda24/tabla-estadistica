@@ -3,31 +3,10 @@ import ApexCharts from "apexcharts";
 export default () => ({
 	/** @type chart ApexCharts */
 	chart: null,
-	promedios: {
-		digiturnoEgreso: {
-			title: 'Digiturno vs Egreso',
-			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
-		},
-		triageAdmision: {
-			title: 'TRIAGE vs Admisión',
-			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
-		},
-		triageEgreso: {
-			title: 'TRIAGE vs Egreso',
-			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
-		},
-		// El 0 en el triage son para las admisiones SIN triage
-		admisionEgreso: {
-			title: 'Admisión vs Egreso',
-			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
-		},
-		admisionHurge: {
-			title: 'Admisión vs Hoja Urgencias',
-			data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
-		},
-	},
+	promedios: {},
 
 	init() {
+		this.promedios = this.defaultCounters();
 		this.chart = new ApexCharts(
 			this.$el.querySelector('div[chart]'),
 			this.getOptionsForChat()
@@ -49,8 +28,9 @@ export default () => ({
 	 * Ordena la información sumando los minutos y el total para cada uno de los 
 	 * casos. No realiza el calculo del promedio.
 	 * @param data {Object[]}
-	 */ 
+	 */
 	setUpData(data) {
+		this.promedios = this.defaultCounters();
 		data.forEach(({ clase_triage, steps }) => {
 			const { triage, admision, hurge, egreso, digiturno } = steps;
 
@@ -135,16 +115,18 @@ export default () => ({
 				opacity: 1
 			},
 			tooltip: {
-        shared: true,
-        intersect: false,
+				shared: true,
+				intersect: false,
 				y: {
-					formatter: function (val) {
+					formatter: (val, { seriesIndex, dataPointIndex })  =>{
+						const totalItems = Object.values(this.promedios)[dataPointIndex].data[seriesIndex][1];
+
 						const parsed = parseFloat(val);
-						const withMinutes = parsed < 1 
+						const withMinutes = (parsed < 1 && parsed > 0)
 							? ` &#10141; ${parsed * 60} Minutos`
 							: '';
 
-						return val + " Horas" + withMinutes;
+						return val + " Horas" + withMinutes + " | Registros: " + totalItems;
 					}
 				}
 			}
@@ -166,15 +148,15 @@ export default () => ({
 			id = parseInt(id);
 
 			prev.push({
-				name: name, 
+				name: name,
 				data: [
 					this.calcularPromedio(this.promedios.digiturnoEgreso.data[id]),
 					this.calcularPromedio(this.promedios.triageAdmision.data[id]),
 					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
 					this.calcularPromedio(this.promedios.admisionHurge.data[id]),
 					this.calcularPromedio(this.promedios.admisionEgreso.data[id])
-				]	
-	    	});
+				]
+			});
 
 			return prev;
 		}, []);
@@ -186,7 +168,7 @@ export default () => ({
 		const yaxis = Object.keys(this.promedios).map((key) => {
 			let totalItems = 0;
 			const averageData = Object.values(this.promedios[key].data)
-			const totalMinutes = averageData.reduce((x, [minutos,total]) => {
+			const totalMinutes = averageData.reduce((x, [minutos, total]) => {
 				if (total === 0) return x;
 
 				x += parseFloat(this.calcularPromedio([minutos, total]));
@@ -195,7 +177,7 @@ export default () => ({
 			}, 0);
 
 			const average = totalMinutes / totalItems;
-			const withMinutes = average < 1 
+			const withMinutes = average < 1
 				? ` |  ${(average * 60).toFixed(1)} Minutos`
 				: '';
 			return {
@@ -207,11 +189,37 @@ export default () => ({
 		});
 
 		return { yaxis };
-  	},
+	},
 
 	/** Helper para calcular promedio */
 	calcularPromedio([dividendo, divisor]) {
 		const x = dividendo / divisor;
 		return isNaN(x) ? 0 : x.toFixed(1);
+	},
+
+	defaultCounters() {
+		return {
+			digiturnoEgreso: {
+				title: 'Digiturno vs Egreso',
+				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+			},
+			triageAdmision: {
+				title: 'TRIAGE vs Admisión',
+				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+			},
+			triageEgreso: {
+				title: 'TRIAGE vs Egreso',
+				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+			},
+			// El 0 en el triage son para las admisiones SIN triage
+			admisionEgreso: {
+				title: 'Admisión vs Egreso',
+				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+			},
+			admisionHurge: {
+				title: 'Admisión vs Hoja Urgencias',
+				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
+			},
+		}
 	}
 });

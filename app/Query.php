@@ -64,16 +64,27 @@ class Query
     public function getDocn(string $fecha, string|int $documento): ?int
     {
         $x = $this->db->query(
-            "SELECT docn FROM gema10.d\IPT\DATOS\PTOTC00
+            "SELECT docn, clasepro FROM gema10.d\IPT\DATOS\PTOTC00
             WHERE
-                fecha >= CTOD('$fecha') - 1
+                (fecha BETWEEN CTOD('$fecha') - 1 AND CTOD('$fecha') + 1)
                 AND tercero2 = $documento
             ORDER BY fecha DESC, hora DESC"
         );
 
         if(!$x) return null;
 
-        $docn = (int) $x->fetchColumn();
+        $docns = $x->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($docns) === 0) return null;
+
+        // Por defecto tomamos la última admisión
+        $docn  = (int) $docns[0]['docn'];
+        foreach ($docns as $admision) {
+            if ((int) $admision['clasepro'] === 3) {
+                $docn = (int) $admision['docn'];
+                break;
+            }
+        }
+
         return ($docn === 0) ? null : $docn;
     }
 
