@@ -104,7 +104,7 @@ class InfoLoaderService
      */
     public function loadDigiturnoInfo(array $triages): array
     {
-        $listTurnoId = [];
+        $listTurnoId = [0];
         foreach ($triages as $triage) {
             $turnoId = $triage['turno_id'];
             if ($turnoId === 0) continue;
