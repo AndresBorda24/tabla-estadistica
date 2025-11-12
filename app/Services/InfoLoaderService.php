@@ -154,6 +154,10 @@ class InfoLoaderService
         [$admision, $hurge, $egresoUrge, $egreso] = $this->stepLoaderService->load($docn);
         $infoTriage->setNextDate($admision->strTime);
 
+        $informacionContrato = ($docn)
+            ? $this->query->getInfoContrato($docn)
+            : null;
+
         // Información de la hoja de Urgencias
         $informacionHurgencias = ($docn)
             ? $this->datosHurge->getAll((string) $docn, $paciente->documento)
@@ -190,6 +194,7 @@ class InfoLoaderService
             "clase_triage" => $infoTriage->triage,
             "egreso_urge" => $egresoUrge->destino,
             "infoUrgencias" => $informacionHurgencias,
+            "infoContrato" => $informacionContrato,
             "alerta" => $hayAlerta,
             "steps" => [
                 "digiturno"   => $infoDigiturno?->toArray(),

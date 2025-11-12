@@ -187,4 +187,38 @@ class Query
             "nombre" => $nombre
         ];
     }
+
+    public function getInfoContrato(int $docn): ?array
+    {
+        $x = $this->db->query(
+            "SELECT
+                C.descripcio AS desc,
+                C.tipo_entid,
+                E.nombre AS entidad
+            FROM gema10.d\IPT\DATOS\PTOTC00 AS A
+            LEFT JOIN gema10.d\salud\datos\IPSCONTC AS C
+                ON A.contrato = C.contrato
+                AND A.plan = C.plan
+            LEFT JOIN gema10.d\salud\datos\EPS AS E
+                ON C.entidad = E.codigo
+            WHERE A.docn = $docn"
+        );
+
+        if (!$x || !$contrato = $x->fetch()) return null;
+
+        $contrato['desc'] = static::convertEncoding($contrato['desc']);
+        $contrato['entidad'] = static::convertEncoding($contrato['entidad']);
+        $contrato['tipo_entid'] = match ((int) $contrato['tipo_entid']) {
+            1 => 'ARL',
+            2 => 'SOAT',
+            3 => 'Escolar',
+            4 => 'Prepagada',
+            5 => 'EPS',
+            6 => 'Particular',
+            7 => 'Otros',
+            default => null,
+        };
+
+        return $contrato;
+    }
 }
