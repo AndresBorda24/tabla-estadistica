@@ -114,7 +114,7 @@ function listar(data) {
         data: "paciente.nombre",
         /** @param data {string} */
         render: function (data, type, row, meta) {
-          const { docn, paciente, steps } = row;
+          const { docn, paciente, steps, infoContrato } = row;
           const { digiturno } = steps;
 
           return `<span class="d-flex flex-column small text-nowrap">
@@ -125,6 +125,12 @@ function listar(data) {
               <span class="small text-muted">
                 Digiturno: <b>${digiturno?.fecha || 'Sin registro'}</b>
               </span>
+              ${(infoContrato === null) ? '' : `
+                <div class="small text-capitalize flex" style="gap: 3px; color: #3a7176">
+                  <span class="fw-bold">${infoContrato.entidad.toLowerCase()}</span><b>|</b>
+                  <span>${infoContrato.desc.toLowerCase()}</span><b>|</b>
+                  <span class="fw-bold">${infoContrato.tipo_entid.toLowerCase()}</span>
+                </div>`}
             </span>`;
         },
       },
