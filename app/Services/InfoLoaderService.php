@@ -172,6 +172,7 @@ class InfoLoaderService
         // Actualizar contadores
         $this->contadores->addGeneral();
         (!$docn) && $this->contadores->addSinAdmision();
+        (!$infoDigiturno) && $this->contadores->addSinDigiturno();
         $this->contadores->addTriage($infoTriage->triage);
         ($docn && !$hurge->strTime) && $this->contadores->addSinHurge();
         ($paciente->genero === "F")
