@@ -14,6 +14,8 @@ $(async function () {
 
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
+    if (data.steps.hurge.fecha === null) return;
+
     document.dispatchEvent(
       new CustomEvent('open-modal-urgencias', { detail: data })
     );
