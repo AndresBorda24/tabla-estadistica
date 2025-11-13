@@ -102,9 +102,9 @@ export default () => ({
 				categories: [
 					this.promedios.digiturnoEgreso.title,
 					this.promedios.triageAdmision.title,
-					this.promedios.triageEgreso.title,
 					this.promedios.admisionHurge.title,
-					this.promedios.admisionEgreso.title
+					this.promedios.admisionEgreso.title,
+					this.promedios.triageEgreso.title,
 				],
 				title: {
 					text: 'Horas'
@@ -150,11 +150,12 @@ export default () => ({
 			prev.push({
 				name: name,
 				data: [
+					// Ojo *** Deben estar en el mismo orden que en `defaultCounters()`
 					this.calcularPromedio(this.promedios.digiturnoEgreso.data[id]),
 					this.calcularPromedio(this.promedios.triageAdmision.data[id]),
-					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
 					this.calcularPromedio(this.promedios.admisionHurge.data[id]),
-					this.calcularPromedio(this.promedios.admisionEgreso.data[id])
+					this.calcularPromedio(this.promedios.admisionEgreso.data[id]),
+					this.calcularPromedio(this.promedios.triageEgreso.data[id]),
 				]
 			});
 
@@ -207,8 +208,8 @@ export default () => ({
 				title: 'TRIAGE vs Admisión',
 				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
 			},
-			triageEgreso: {
-				title: 'TRIAGE vs Egreso',
+			admisionHurge: {
+				title: 'Admisión vs Hoja Urgencias',
 				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
 			},
 			// El 0 en el triage son para las admisiones SIN triage
@@ -216,8 +217,8 @@ export default () => ({
 				title: 'Admisión vs Egreso',
 				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
 			},
-			admisionHurge: {
-				title: 'Admisión vs Hoja Urgencias',
+			triageEgreso: {
+				title: 'TRIAGE vs Egreso',
 				data: { 0: [0, 0], 1: [0, 0], 2: [0, 0], 3: [0, 0], 4: [0, 0], 5: [0, 0] },
 			},
 		}

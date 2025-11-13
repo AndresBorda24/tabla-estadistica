@@ -125,9 +125,11 @@ function listar(data) {
               <span class="small text-muted">
                 ${paciente.documento} - Edad: ${paciente.edad} ${docn ? `- ${docn}` : ''}
               </span>
-              <span class="small text-muted">
+              ${digiturno?.fecha ? `
+              <span class="small" style="color: #7e5842">
                 Digiturno: <b>${digiturno?.fecha || 'Sin registro'}</b>
               </span>
+              ` : ''}
               ${(infoContrato === null) ? '' : `
                 <div class="small text-capitalize flex" style="gap: 3px; color: #3a7176">
                   <span class="fw-bold">${infoContrato.entidad.toLowerCase()}</span><b>|</b>
