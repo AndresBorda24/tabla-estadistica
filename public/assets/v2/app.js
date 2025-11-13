@@ -53,6 +53,7 @@ function setContadores(contadores) {
   $("#nt4").text(contadores.triage[4]);
   $("#nt5").text(contadores.triage[5]);
 
+  $("#contador-no-digiturno").html(contadores.sinDigiturno);
   $("#contador-no-emergency").html(contadores.sinHurge);
   $("#contador-no-admission").html(contadores.sinAdmision);
   $("#contador-admission").html(contadores.general - contadores.sinAdmision);

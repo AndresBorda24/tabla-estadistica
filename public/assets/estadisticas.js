@@ -139,7 +139,8 @@ function setUpTypeFilter(table) {
       "woman": (item) => item.paciente.genero === 'F',
       "admission": (item) => Boolean(item.steps.admision.fecha),
       "no-admission": (item) => ! Boolean(item.steps.admision.fecha),
-      "no-emergency": (item) => Boolean(item.steps.admision.fecha) && ! Boolean(item.steps.hurge.fecha)
+      "no-emergency": (item) => Boolean(item.steps.admision.fecha) && ! Boolean(item.steps.hurge.fecha),
+      "no-digiturno": (item) => ! Boolean(item.steps.digiturno?.fecha)
     };
 
     return checked.some(c => cases[c](data));
