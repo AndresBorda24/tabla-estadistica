@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Services\AnalisisIA;
+// use App\Services\AnalisisIA;
 use App\UserSession;
 use HighLiuk\Vite\Manifest;
 use HighLiuk\Vite\Vite;
@@ -16,7 +16,7 @@ class ViewController
 	public function __construct( public readonly PhpRenderer $views) 
 	{
 		$vite = new Vite(
-			new Manifest(PROJECT_BASE_PATH.'/public/src/', '/tablaestadistica/src/')
+			new Manifest(PROJECT_BASE_PATH.'/public/src/', \App\Config::get('app_base_path').'/'.'src/')
 		);
 		$this->views->addAttribute('vite', $vite);
 	}
