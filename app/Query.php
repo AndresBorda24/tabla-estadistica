@@ -68,6 +68,7 @@ class Query
             WHERE
                 (fecha BETWEEN CTOD('$fecha') - 1 AND CTOD('$fecha') + 1)
                 AND tercero2 = $documento
+                AND NOT'<<ANULADA'\$OBSERVAC
             ORDER BY fecha DESC, hora DESC"
         );
 

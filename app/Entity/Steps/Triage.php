@@ -21,7 +21,7 @@ class Triage extends BaseStep implements StepInterface
 
     public function warning(): bool
     {
-        if($this->admision && $this->strTime) return false;
+        if($this->admision) return false;
 
         // Minutos de diferencia con la admisión
         $m = $this->getDiffInSeconds() / 60;
