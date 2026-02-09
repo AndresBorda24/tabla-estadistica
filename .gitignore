@@ -2,5 +2,6 @@ vendor
 node_modules
 mock-data.json
 .env
+.env.production
 public/src
 .vite

@@ -12,6 +12,7 @@ class Counters
     private int $general = 0;
     private int $sinHurge = 0;
     private int $sinAdmision = 0;
+    private int $sinDigiturno = 0;
     private array $triage = [
         0 => 0,
         1 => 0,
@@ -31,6 +32,7 @@ class Counters
             'sinHurge'  => $this->getSinHurge(),
             'triage'    => $this->getTriage(),
             'sinAdmision'   => $this->getSinAdmision(),
+            'sinDigiturno'  => $this->getSinDigiturno(),
         ];
     }
 
@@ -91,6 +93,24 @@ class Counters
     public function getGeneral(): int
     {
         return $this->general;
+    }
+
+    /**
+     * Get the value of sinDigiturno
+     */
+    public function getSinDigiturno(): int
+    {
+        return $this->sinDigiturno;
+    }
+
+
+    /**
+     * Add the value of sinDigiturno
+     */
+    public function addSinDigiturno(int $sinDigiturno = 1): self
+    {
+        $this->sinDigiturno += $sinDigiturno;
+        return $this;
     }
 
     /**

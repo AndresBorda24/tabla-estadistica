@@ -27,8 +27,8 @@ class Query
     public function getTriages(string $fecha): array
     {
         $triages = $this->db->query("SELECT
-                T.Clas_tria, T.Freg, T.hora, T.Atendido, T.num_histo, P.edad,
-                P.apellido1, P.Apellido2, P.nombre, P.nombre2, P.sexo
+                T.Clas_tria, T.Freg, T.hora, T.Atendido, T.num_histo, T.turno_id, T.docn,
+                P.edad, P.apellido1, P.Apellido2, P.nombre, P.nombre2, P.sexo
             FROM GEMA_MEDICOS\DATOS\TRIAGEV2.dbf AS T
             LEFT JOIN gema10.d\salud\DATOS\sahistoc AS P
                 ON T.num_histo = P.num_histo
@@ -54,7 +54,9 @@ class Query
                 "documento" => $t['num_histo'],
                 "edad"   => $t['edad'],
                 "genero" => $t['sexo'],
-                "nombre" => $nombre
+                "nombre" => $nombre,
+                "turno_id" => (int) $t['turno_id'],
+                "docn" => (int) $t['docn']
             ];
         }, $triages->fetchAll());
     }
@@ -62,16 +64,28 @@ class Query
     public function getDocn(string $fecha, string|int $documento): ?int
     {
         $x = $this->db->query(
-            "SELECT docn FROM gema10.d\IPT\DATOS\PTOTC00
+            "SELECT docn, clasepro FROM gema10.d\IPT\DATOS\PTOTC00
             WHERE
-                fecha >= CTOD('$fecha') - 1
+                (fecha BETWEEN CTOD('$fecha') - 1 AND CTOD('$fecha') + 1)
                 AND tercero2 = $documento
+                AND NOT'<<ANULADA'\$OBSERVAC
             ORDER BY fecha DESC, hora DESC"
         );
 
         if(!$x) return null;
 
-        $docn = (int) $x->fetchColumn();
+        $docns = $x->fetchAll(\PDO::FETCH_ASSOC);
+        if (count($docns) === 0) return null;
+
+        // Por defecto tomamos la última admisión
+        $docn  = (int) $docns[0]['docn'];
+        foreach ($docns as $admision) {
+            if ((int) $admision['clasepro'] === 3) {
+                $docn = (int) $admision['docn'];
+                break;
+            }
+        }
+
         return ($docn === 0) ? null : $docn;
     }
 
@@ -173,5 +187,39 @@ class Query
             "genero" => $t['sexo'],
             "nombre" => $nombre
         ];
+    }
+
+    public function getInfoContrato(int $docn): ?array
+    {
+        $x = $this->db->query(
+            "SELECT
+                C.descripcio AS desc,
+                C.tipo_entid,
+                E.nombre AS entidad
+            FROM gema10.d\IPT\DATOS\PTOTC00 AS A
+            LEFT JOIN gema10.d\salud\datos\IPSCONTC AS C
+                ON A.contrato = C.contrato
+                AND A.plan = C.plan
+            LEFT JOIN gema10.d\salud\datos\EPS AS E
+                ON C.entidad = E.codigo
+            WHERE A.docn = $docn"
+        );
+
+        if (!$x || !$contrato = $x->fetch()) return null;
+
+        $contrato['desc'] = static::convertEncoding($contrato['desc']);
+        $contrato['entidad'] = static::convertEncoding($contrato['entidad']);
+        $contrato['tipo_entid'] = match ((int) $contrato['tipo_entid']) {
+            1 => 'ARL',
+            2 => 'SOAT',
+            3 => 'Escolar',
+            4 => 'Prepagada',
+            5 => 'EPS',
+            6 => 'Particular',
+            7 => 'Otros',
+            default => null,
+        };
+
+        return $contrato;
     }
 }

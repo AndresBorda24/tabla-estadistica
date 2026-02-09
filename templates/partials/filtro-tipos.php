@@ -5,7 +5,8 @@
 		'woman' 	=> ['icon' => 'woman', 'text' => 'Mujeres'],
 		'admission' => ['icon' => 'clipboard-plus', 'text' => 'Admisiones'],
 		'no-admission' => ['icon' => 'clipboard-late', 'text' => 'Sin Admisión' ],
-		'no-emergency' => ['icon' => 'heart-monitor', 'text' => 'Sin H Urgencias']
+		'no-emergency' => ['icon' => 'heart-monitor', 'text' => 'Sin H Urgencias'],
+		'no-digiturno' => ['icon' => 'clock', 'text' => 'Sin Digiturno']
 	] as $id => $type): ?>
 		<div>
 			<input type="checkbox" name="filtro-type" id="cc-<?= $id ?>" value="<?= $id ?>" class="d-none">

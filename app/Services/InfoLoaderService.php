@@ -12,37 +12,59 @@ use App\Entity\Steps\Triage;
 use App\Query;
 use App\Services\StepLoaderService;
 use App\DatosHurge;
+use App\DB8cho;
+use App\Entity\Steps\Digiturno;
 
 class InfoLoaderService
 {
     private array $pacientes = [];
     private Counters $contadores;
     public readonly Query $query;
+    public readonly DB8cho $db8cho;
     public readonly DatosHurge $datosHurge;
     public readonly StepLoaderService $stepLoaderService;
 
-    public function __construct(Query $query)
+    public function __construct(Query $query, DB8cho $db8cho)
     {
         $this->query = $query;
+        $this->db8cho = $db8cho;
         $this->contadores = new Counters;
         $this->datosHurge = new DatosHurge($this->query->db);
         $this->stepLoaderService = new StepLoaderService($this->query);
     }
 
-    public function loadWithTriage(string $fechaForGema): void
+    /**
+     * Carga todas las atenciones que tengan triage. 
+     * @param bool $loadDigiturnoInfo Determina si el sistema debe buscar 
+     *      la información del digiturno relacionado.
+     */
+    public function loadWithTriage(string $fechaForGema, bool $loadDigiturnoInfo = false): void
     {
         $triages = $this->query->getTriages($fechaForGema);
+        $infoDigiturnos = $loadDigiturnoInfo 
+            ? $this->loadDigiturnoInfo($triages) 
+            : [];
+
         foreach ($triages as $triage) {
             $paciente = Paciente::fromArray($triage);
-            $docn = $this->query->getDocn($fechaForGema, $paciente->documento);
+            $docn = $triage['docn'] ?: $this->query->getDocn($fechaForGema, $paciente->documento);
             $infoTriage = new Triage(
                 triage: (int) $triage['clase_triage'],
                 time: "$triage[fecha] $triage[hora]",
                 nextTime: null,
-                admision: ($docn !== null)
+                admision: ($docn !== null),
+                turnoId: $triage['turno_id']
             );
 
-            $this->handleData($docn, $paciente, $infoTriage);
+            // --
+            $digiturnoFecha = @$infoDigiturnos[$infoTriage->turnoId];
+            $infoDigiturno = ($loadDigiturnoInfo && $digiturnoFecha)
+                ? new Digiturno(
+                    time: $digiturnoFecha,
+                    nextTime: $infoTriage->getFormattedTime(),
+                ) : null;
+
+            $this->handleData($docn, $paciente, $infoTriage, $infoDigiturno);
         }
     }
 
@@ -69,10 +91,32 @@ class InfoLoaderService
             $paciente = ($infoPaciente)
                 ? Paciente::fromArray($infoPaciente)
                 : new Paciente('', 0, $docn['documento'], 'M');
-            $infoTriage = new Triage(0, null, null, true);
+            $infoTriage = new Triage(0, null, null, true, 0);
 
             $this->handleData((int) $docn['docn'], $paciente, $infoTriage);
         }
+    }
+
+    /**
+     * Carga la información de los digiturnos para los registros que cuenten con 
+     * id de turno.
+     * @param array $triages
+     */
+    public function loadDigiturnoInfo(array $triages): array
+    {
+        $listTurnoId = [0];
+        foreach ($triages as $triage) {
+            $turnoId = $triage['turno_id'];
+            if ($turnoId === 0) continue;
+
+            $listTurnoId[] = $turnoId;
+        }
+
+        $digiturnos = $this->db8cho->getDigiturnosById($listTurnoId, [
+            'digiturno_id', 'digiturno_registro'
+        ]);
+
+        return array_column($digiturnos, 'digiturno_registro', 'digiturno_id');
     }
 
     /**
@@ -96,11 +140,23 @@ class InfoLoaderService
         ];
     }
 
-    private function handleData(?int $docn, Paciente $paciente, Triage $infoTriage): void
-    {
+    /**
+     * Suma los contadores, busca la información de la hoja de urgencias, la 
+     * información del médico, organiza el array de `pacientes` y hace la cena
+     */
+    private function handleData(
+        ?int $docn, 
+        Paciente $paciente, 
+        Triage $infoTriage,
+        ?Digiturno $infoDigiturno = null
+    ): void {
         // Obtenemos la información de las horas de los diferentes parsos
         [$admision, $hurge, $egresoUrge, $egreso] = $this->stepLoaderService->load($docn);
         $infoTriage->setNextDate($admision->strTime);
+
+        $informacionContrato = ($docn)
+            ? $this->query->getInfoContrato($docn)
+            : null;
 
         // Información de la hoja de Urgencias
         $informacionHurgencias = ($docn)
@@ -116,6 +172,7 @@ class InfoLoaderService
         // Actualizar contadores
         $this->contadores->addGeneral();
         (!$docn) && $this->contadores->addSinAdmision();
+        (!$infoDigiturno) && $this->contadores->addSinDigiturno();
         $this->contadores->addTriage($infoTriage->triage);
         ($docn && !$hurge->strTime) && $this->contadores->addSinHurge();
         ($paciente->genero === "F")
@@ -138,8 +195,10 @@ class InfoLoaderService
             "clase_triage" => $infoTriage->triage,
             "egreso_urge" => $egresoUrge->destino,
             "infoUrgencias" => $informacionHurgencias,
+            "infoContrato" => $informacionContrato,
             "alerta" => $hayAlerta,
             "steps" => [
+                "digiturno"   => $infoDigiturno?->toArray(),
                 "triage"      => $infoTriage->toArray(),
                 "admision"    => $admision->toArray(),
                 "hurge"       => $hurge->toArray(),

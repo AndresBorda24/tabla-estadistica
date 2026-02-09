@@ -13,14 +13,15 @@ class Triage extends BaseStep implements StepInterface
         ?string $time,
         ?string $nextTime,
         /** Determina si se encontró o no la admisión */
-        public readonly bool $admision
+        public readonly bool $admision,
+        public readonly int $turnoId 
     ) {
         parent::__construct($time, $nextTime);
     }
 
     public function warning(): bool
     {
-        if($this->admision && $this->strTime) return false;
+        if($this->admision) return false;
 
         // Minutos de diferencia con la admisión
         $m = $this->getDiffInSeconds() / 60;
@@ -35,5 +36,19 @@ class Triage extends BaseStep implements StepInterface
             ($t === 3 && $m >= 120) => true,
             default => false
         };
+    }
+
+    public function toArray(): array
+    {
+        return [
+            "turno" => $this->turnoId,
+            "fecha" => $this->getFormattedTime(),
+            "diff"  => $this->getDiffInSeconds(),
+            "timestamp" => $this->time->getTimestamp(),
+            "formatedDiff" => $this->getDiffFormatted(),
+            "warning" => ($this instanceof StepInterface)
+                ? $this->warning()
+                : null
+        ];
     }
 }

@@ -14,6 +14,8 @@ $(async function () {
 
   TABLA.on("dblclick", "tbody tr", function () {
     const data = TABLA.row(this).data();
+    if (data.steps.hurge.fecha === null) return;
+
     document.dispatchEvent(
       new CustomEvent('open-modal-urgencias', { detail: data })
     );
@@ -53,9 +55,10 @@ function setContadores(contadores) {
   $("#nt4").text(contadores.triage[4]);
   $("#nt5").text(contadores.triage[5]);
 
+  $("#contador-no-digiturno").html(contadores.sinDigiturno);
   $("#contador-no-emergency").html(contadores.sinHurge);
   $("#contador-no-admission").html(contadores.sinAdmision);
-  $("#contador-admission").html(contadores.general);
+  $("#contador-admission").html(contadores.general - contadores.sinAdmision);
   $("#contador-warning").html(contadores.alertas);
   $("#contador-man").html(contadores.hombres);
   $("#contador-woman").html(contadores.mujeres);
@@ -114,15 +117,32 @@ function listar(data) {
         data: "paciente.nombre",
         /** @param data {string} */
         render: function (data, type, row, meta) {
-          const { docn, paciente } = row;
+          const { docn, paciente, steps, infoContrato } = row;
+          const { digiturno } = steps;
+
           return `<span class="d-flex flex-column small text-nowrap">
-              <span>${paciente.nombre || "---"}</span>
-              <span class="small text-muted">${paciente.documento} - Edad: ${
-            paciente.edad
-          }</span>
-              <span class="small text-muted">Admisión: ${docn}</span>
+              <span class="fw-semibold">${paciente.nombre || "---"}</span>
+              <span class="small text-muted">
+                ${paciente.documento} - Edad: ${paciente.edad} ${docn ? `- ${docn}` : ''}
+              </span>
+              ${digiturno?.fecha ? `
+              <span class="small" style="color: #7e5842">
+                Digiturno: <b>${digiturno?.fecha || 'Sin registro'}</b>
+              </span>
+              ` : ''}
+              ${(infoContrato === null) ? '' : `
+                <div class="small text-capitalize flex" style="gap: 3px; color: #3a7176">
+                  <span class="fw-bold">${infoContrato.entidad.toLowerCase()}</span><b>|</b>
+                  <span>${infoContrato.desc.toLowerCase()}</span><b>|</b>
+                  <span class="fw-bold">${infoContrato.tipo_entid.toLowerCase()}</span>
+                </div>`}
             </span>`;
         },
+      },
+      {
+        data: "steps.digiturno.formatedDiff",
+        className: "small position-absolute crono-class border-0 shadow-none w-0 p-0 text-nowrap",
+        orderable: false,
       },
       {
         data: "steps.triage.fecha",

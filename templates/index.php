@@ -76,6 +76,7 @@
             <tr>
               <th></th>
               <th>Paciente</th>
+              <th></th> <!-- Cronometro de Digiturno-->
               <th>Triage</th>
               <!-- <th>Tipo Triage</th> -->
               <th></th> <!-- Cronometro de Triage-->
@@ -103,6 +104,13 @@
     </div>
 
     <?= $this->fetch('./partials/TriageMinDiffChart.php') ?>
+
+    <div class="card my-4">
+      <div class="card-body">
+        <?= nl2br(htmlspecialchars($analisisIA)) ?>
+      </div>
+    </div>
+
   </div>
 
   <div class="fixed-top vh-100 vw-100 d-flex bg-dark" id="full-loader">

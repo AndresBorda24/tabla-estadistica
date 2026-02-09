@@ -3,7 +3,8 @@ import FiltroMedicos from './components/FiltroMedicos';
 import ModalUrgencias from './components/ModalUrgencias';
 import TriageMinDiffChart from './components/TriageMinDiffChart';
 import Alpine from 'alpinejs';
-window.Alpine = Alpine
+
+if (import.meta.env.DEV) window.Alpine = Alpine;
  
 document.addEventListener('alpine:init', () => {
 	Alpine.data('FiltroMedicos', FiltroMedicos);
