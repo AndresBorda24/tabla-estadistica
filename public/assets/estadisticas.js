@@ -6,7 +6,6 @@ $(function() {
 function renderColFecha({ data = "", prev = false, next = false, hoverable = false, warning = false }, isLastOne = false) {
   return `
     <span
-      style="min-width: 100px"
       class="d-block text-center ${(data && !next) ? 'fw-bold' : 'opacity-75'}"
     >${data ?? '&hellip;'}</span>
     ${

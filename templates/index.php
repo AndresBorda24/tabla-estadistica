@@ -75,19 +75,19 @@
           <thead>
             <tr>
               <th></th>
-              <th>Paciente</th>
+              <th class="text-center">Paciente</th>
               <th></th> <!-- Cronometro de Digiturno-->
-              <th>Triage</th>
+              <th class="text-center">Triage</th>
               <!-- <th>Tipo Triage</th> -->
               <th></th> <!-- Cronometro de Triage-->
-              <th>Admisión</th>
+              <!-- <th>Admisión</th> -->
+              <!-- Cronometro de Urgencias -->
+              <!-- <th></th>  -->
+              <th class="text-center">H. Urgencias</th>
               <th></th> <!-- Cronometro de Urgencias -->
-              <th>H. Urgencias</th>
-              <th></th> <!-- Cronometro de Urgencias -->
-              <th>Egreso Urgencias</th>
-              <th></th> <!-- Cronometro de Urgencias -->
-              <th>Egreso Atención</th>
-              <th>Medico</th>
+              <th class="text-center">Egreso Urgencias</th>
+              <!-- <th>Egreso Atención</th> -->
+              <th class="text-center">Medico</th>
             </tr>
           </thead>
         </table>

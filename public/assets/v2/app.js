@@ -83,9 +83,9 @@ function listar(data) {
       url: "es-MX.json",
     },
     scrollY: "50vh",
-    scrollX: true,
-    scrollCollapse: true,
-    fixedColumns: { left: 0, right: 2 },
+    // scrollX: true,
+    // scrollCollapse: true,
+    fixedColumns: { left: 0 },
     dom: "Bfrtip",
     buttons: ["excel"],
     data: data,
@@ -93,7 +93,7 @@ function listar(data) {
     columns: [
       {
         data: "alerta",
-        className: "small",
+        className: "small max-w-icon",
         render: function (data, type, row) {
           const { paciente, alerta } = row;
           const genero = paciente?.genero || "F";
@@ -108,9 +108,13 @@ function listar(data) {
               ? "Image/hombre.png"
               : "Image/nino.png";
 
-          return `<img src="${icon}"> ${
-            alerta ? `<img src="Image/advertencia.png">` : ""
-          }`;
+          return `<div class="grid">
+            ${
+              `<img src="${icon}"> ${
+                alerta ? `<img src="Image/advertencia.png">` : ""
+              }`
+            }
+          </div>`;
         },
       },
       {
@@ -171,25 +175,6 @@ function listar(data) {
         orderable: false,
       },
       {
-        data: "steps.admision.fecha",
-        className: fechasClassName,
-        render: (data, type, row) => {
-          const { fecha: fechaUrg } = row.steps.hurge;
-          const { admision } = row.steps;
-          return renderColFecha({
-            data: data,
-            prev: true,
-            next: fechaUrg,
-            warning: Boolean(admision.warning),
-          });
-        },
-      },
-      {
-        data: "steps.admision.formatedDiff",
-        className: "small position-absolute crono-class w-0 p-0 border-0 shadow-none",
-        orderable: false,
-      },
-      {
         data: "steps.hurge.fecha",
         className: fechasClassName,
         render: (data, type, row) => {
@@ -239,34 +224,9 @@ function listar(data) {
         },
       },
       {
-        data: "steps.egresoHurge.formatedDiff",
-        className: "small position-absolute crono-class w-0 p-0 border-0 shadow-none",
-        orderable: false,
-      },
-      {
-        data: "steps.egreso.fecha",
-        className: fechasClassName,
-        render: function (data, type, row) {
-          const { egreso_urge } = row;
-          const { egresoHurge, egreso } = row.steps;
-
-          if (egreso_urge != "0") {
-            data = (egreso_urge === "1") ? data : "Egreso Interno";
-          }
-
-          return renderColFecha(
-            {
-              data: data,
-              prev: Boolean(egresoHurge.fecha),
-              warning: Boolean(egreso.warning),
-            },
-            true
-          );
-        },
-      },
-      {
         data: "medico.nombre",
-        className: "small",
+        className: "small text-center pt-4",
+        // className: fechasClassName,
         render: function (data, type, row) {
           const medico = row.medico;
           return medico ? `<span title="${data}">${medico.cod}</span>` : "";

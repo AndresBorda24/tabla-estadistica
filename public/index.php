@@ -34,7 +34,7 @@ $app->post(
 	'/estadisticas', 
 	[
 		\App\Http\Controllers\EstadisticasController::class, 
-		App\Config::isProduction() ? 'data' : 'data'
+		App\Config::isProduction() ? 'data' : 'devData'
 	]
 );
 

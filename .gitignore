@@ -4,4 +4,5 @@ mock-data.json
 .env
 .env.production
 public/src
+public/session.php
 .vite

@@ -366,3 +366,7 @@ input[type="checkbox"][name="filtro-type"]:checked + label{
 body:has(dialog[open]) {
   overflow: hidden;
 }
+
+.max-w-icon {
+  max-width: 30px;
+}
